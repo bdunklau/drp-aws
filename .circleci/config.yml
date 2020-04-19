@@ -44,6 +44,10 @@ jobs:
           command: |
             cd drp-client && npm install
       - run:
+          name: npm run-script build (prod)
+          command: |
+            cd drp-client && npm run-script build
+      - run:
           name: npm test
           command: |
             cd drp-client && npm test
