@@ -5,7 +5,9 @@
     "ng": "ng",
     "start": "ng serve  --host 172.31.28.156",
     "build": "ng build --prod --base-href /drp/",
+    "builddev": "ng build --base-href /drp/",
     "test": "ng test",
+    "deploy": "rm -rf /var/www/html/drp && cp -r ~/drp/drp-client/dist/. /var/www/html/drp",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
