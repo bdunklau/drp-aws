@@ -13,11 +13,16 @@ app.post('/drpapi/set-toll', function (req, res) {
   tollServiceObj.setToll()
 })
 
-app.get('/drpapi/get-toll/:location/:time', function (req, res) {
+app.get('/drpapi/get-toll/:loc/:time', function (req, res) {
   let tollServiceObj = new tollService(req, res)
   tollServiceObj.getToll();
 })
 
+
+app.get('/drpapi/get-tolls', function (req, res) {
+  let tollServiceObj = new tollService(req, res)
+  tollServiceObj.getTolls();
+})
 
 
 app.get('/api/foo', function(req, res) {
