@@ -50,8 +50,8 @@ class TollService{
 
     getToll(){
         let self = this;
-	let location = this.req.params.location;
-	let time = this.req.params.time;
+	let location = this.req.params.loc;
+	let time = parseInt(this.req.params.time);
         try{
             MongoClient.connect(url, function(err, client) {
                 if(err) throw err;
@@ -59,7 +59,7 @@ class TollService{
                 let tolls = []
 
                 var db = client.db("drpDb");
-                let cursor = db.collection('tollPrices').find({location: location, timea: {$lt: time}, timeb: {$gt: time}});
+                let cursor = db.collection('tollPrices').find({location: location,  timea: {$lt: time} , timeb: {$gt: time} });
                 if(!cursor) throw "no cursor";
                 cursor.each(function(err, doc) {
                     if(err) throw err;
@@ -68,7 +68,8 @@ class TollService{
                         tolls.push(doc)
                     } else {
                         return self.res.status(200).json({
-                            statusXXXXX: 'success',
+                            status: 'success',
+			    args: {location: location, time: time},
                             data: tolls
                         })
                     }
@@ -82,6 +83,41 @@ class TollService{
             })
         }
     }
+
+
+    getTolls(){
+        let self = this;
+        try{
+            MongoClient.connect(url, function(err, client) {
+                if(err) throw err;
+                assert.equal(null, err);
+                let tolls = []
+                var db = client.db("drpDb");
+                let cursor = db.collection('tollPrices').find();
+                if(!cursor) throw "no cursor";
+                cursor.each(function(err, doc) {
+                    if(err) throw err;
+                    assert.equal(err, null);
+                    if (doc != null) {
+                        tolls.push(doc)
+                    } else {
+                        return self.res.status(200).json({
+                            status: 'success',
+                            data: tolls
+                        })
+                    }
+                });
+            });
+        }
+        catch(error){
+            return self.res.status(500).json({
+                status: 'error',
+                error: error
+            })
+        }
+    }
+
+
 
 }
 module.exports = TollService
