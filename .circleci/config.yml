@@ -20,5 +20,8 @@ jobs:
           name: npm test
           command: |
             cd drp-client && npm test
-
+      - run:
+          name: npm e2e
+          command: |
+            cd drp-client && npm run e2e
 
