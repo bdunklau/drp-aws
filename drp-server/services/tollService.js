@@ -58,15 +58,15 @@ class TollService{
             MongoClient.connect(url, function(err, client) {
                 if(err) throw err;
                 assert.equal(null, err);
-                let tolls = []
-
                 var db = client.db("drpDb");
-                let result = db.collection('tollPrices').deleteMany(parms);
-                return self.res.status(200).json({
-                    status: 'delete tolls',
-	            args: parms,
-                    result: result 
-                })
+		db.collection('tollPrices').deleteMany(parms, (err, collection) => {
+                    if(err) throw err;
+                    return self.res.status(200).json({
+                        status: 'delete tolls',
+	                args: parms,
+                        result: collection.result.n 
+                    })
+		})
 
             });
         }
