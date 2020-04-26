@@ -24,6 +24,10 @@ app.get('/drpapi/get-tolls', function (req, res) {
   tollServiceObj.getTolls();
 })
 
+app.post('/drpapi/delete-tolls', function (req, res) {
+  let tollServiceObj = new tollService(req, res)
+  tollServiceObj.deleteTolls()
+})
 
 app.get('/api/foo', function(req, res) {
   res.send({ok: 'ok!!'});
