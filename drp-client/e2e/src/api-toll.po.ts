@@ -3,7 +3,8 @@ import * as protractor from 'protractor';
 import * as request from 'request'; // https://stackoverflow.com/questions/45182309/making-an-api-call-while-running-protractor-tests
 import * as _ from 'lodash';
 
-const server = 'http://172.31.28.156:3000/drpapi';
+//const server = 'http://172.31.28.156:3000/drpapi';
+const server = 'http://'+process.env.DRP_API_SERVER+':3000/drpapi';
 
 export class TollApi {
 
