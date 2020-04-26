@@ -22,10 +22,10 @@ class TollService{
     // body/form parameters:  price, location, timea, timeb	
     setToll() {
         let self = this;
-	let price = this.req.body.price;
+	let price = parseFloat(this.req.body.price);
 	let location = this.req.body.location;
-	let timea = this.req.body.timea;
-	let timeb = this.req.body.timeb;
+	let timea = parseInt(this.req.body.timea);
+	let timeb = parseInt(this.req.body.timeb);
 	try {
             MongoClient.connect(url, function(err, client) {
                 var db = client.db("drpDb");
@@ -34,7 +34,9 @@ class TollService{
                 self.insert(tollPrice, db, function(){
                     client.close()
                     return self.res.status(200).json({
-                        status: 'success'
+                        status: 'set toll',
+			// result: ?????  don't know what the result/return of the insert is
+	                args: {'price': price, 'location': location, 'timea': timea, 'timeb': timeb}
                     })
                 })
             });
@@ -45,6 +47,35 @@ class TollService{
                 error: error
             })
 	}
+    }
+
+
+    deleteTolls(){
+        let self = this;
+	let location = this.req.body.location;
+	let parms = {location: location};    
+        try{
+            MongoClient.connect(url, function(err, client) {
+                if(err) throw err;
+                assert.equal(null, err);
+                let tolls = []
+
+                var db = client.db("drpDb");
+                let result = db.collection('tollPrices').deleteMany(parms);
+                return self.res.status(200).json({
+                    status: 'delete tolls',
+	            args: parms,
+                    result: result 
+                })
+
+            });
+        }
+        catch(error){
+            return self.res.status(500).json({
+                status: 'error',
+                error: error
+            })
+        }
     }
 
 
@@ -68,9 +99,11 @@ class TollService{
                         tolls.push(doc)
                     } else {
                         return self.res.status(200).json({
-                            status: 'success',
+                            status: 'get toll',
 			    args: {location: location, time: time},
-                            data: tolls
+                            result: tolls,
+		            doc: doc,
+		            price: tolls && tolls.length > 0 ? tolls[0].price : 0
                         })
                     }
                 });
@@ -103,7 +136,7 @@ class TollService{
                     } else {
                         return self.res.status(200).json({
                             status: 'success',
-                            data: tolls
+                            result: tolls
                         })
                     }
                 });
