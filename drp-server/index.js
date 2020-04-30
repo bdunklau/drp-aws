@@ -36,6 +36,36 @@ app.post('/drpapi/charge-vehicle', function (req, res) {
   chargeVehicleServiceObj.chargeVehicle();
 })
 
+app.get('/drpapi/get-vehicle-charges/:plate', function (req, res) {
+  let tollServiceObj = new tollService(req, res);
+  let chargeVehicleServiceObj = new chargeVehicleService(req, res, tollServiceObj);
+  chargeVehicleServiceObj.getVehicleCharges();
+})
+
+app.get('/drpapi/get-vehicle-charges/:plate/since/:date1', function (req, res) {
+  let tollServiceObj = new tollService(req, res);
+  let chargeVehicleServiceObj = new chargeVehicleService(req, res, tollServiceObj);
+  chargeVehicleServiceObj.getVehicleCharges();
+})
+
+app.get('/drpapi/get-vehicle-charges/:plate/until/:date2', function (req, res) {
+  let tollServiceObj = new tollService(req, res);
+  let chargeVehicleServiceObj = new chargeVehicleService(req, res, tollServiceObj);
+  chargeVehicleServiceObj.getVehicleCharges();
+})
+
+app.get('/drpapi/get-vehicle-charges/:plate/range/:date1/:date2', function (req, res) {
+  let tollServiceObj = new tollService(req, res);
+  let chargeVehicleServiceObj = new chargeVehicleService(req, res, tollServiceObj);
+  chargeVehicleServiceObj.getVehicleCharges();
+})
+
+app.post('/drpapi/delete-vehicle-charges', function (req, res) {
+  let tollServiceObj = new tollService(req, res);
+  let chargeVehicleServiceObj = new chargeVehicleService(req, res, tollServiceObj);
+  chargeVehicleServiceObj.deleteVehicleCharges();
+})
+
 
 app.get('/api/foo', function(req, res) {
   res.send({ok: 'ok!!'});

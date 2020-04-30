@@ -4,7 +4,7 @@ import { ChargeVehicleApi } from './api-charge-vehicle.po';
 import { TollApi } from './api-toll.po';
 //import { TestSupport } from './test-support.po';
 import * as _ from 'lodash';
-//import * as moment from 'moment';
+import * as moment from 'moment';
 
 // These API tests primarily help us support the browser tests
 // In order to have confidence in those browser tests, we have to be confident that
@@ -36,65 +36,76 @@ describe('The ChargeVehicle API', () => {
 
 
   it('should be able to charge a toll to a license plate', async () => {
-    let plate = 'SSS 1234';
-    //let time1 = 1100;
-    //let time2 = 1400;
+    let plate = 'SSS1234';
+    let plate2 = 'PLATE2';
 
     var actual;
 
-    actual = await chargeVehicleApi.chargeVehicle(plate, loc1, 900);
-    chargeVehicleApi.verifyCharge({plate: plate, location: loc1, time: 900, price: 1.09}, actual['args'], '11111111111');
-
-    actual = await chargeVehicleApi.chargeVehicle(plate, loc1, 1100);
-    chargeVehicleApi.verifyCharge({plate: plate, location: loc1, time: 1100, price: 2.09}, actual['args'], '222222222');
-
-    actual = await chargeVehicleApi.chargeVehicle(plate, loc2, 900);
-    chargeVehicleApi.verifyCharge({plate: plate, location: loc2, time: 900, price: 3.09}, actual['args'], '33333333333');
-
-    actual = await chargeVehicleApi.chargeVehicle(plate, loc2, 1100);
-    chargeVehicleApi.verifyCharge({plate: plate, location: loc2, time: 1100, price: 4.09}, actual['args'], '4444444444');
+    // simulate different "current" times
+    var d1 = moment().set('hour', 9).set('minute', 0).valueOf();  // 9am today
+    var d2 = moment().set('hour', 11).set('minute', 0).valueOf();  // 11am today
+    var d3 = moment().set('hour', 9).set('minute', 0).subtract(1, 'days').valueOf();  // 9am yesterday
+    var d4 = moment().set('hour', 11).set('minute', 0).subtract(1, 'days').valueOf();  // 11am yesterday
 
 
-    // BELOW, IN afterEach(), NEED TO ALSO DELETE THE CAR CHARGES.  WILL MESS UP THE BALANCE FIGURING IF NOT DELETED
+    // CREATE 4 CHARGES
+    actual = await chargeVehicleApi.chargeVehicle(plate, loc1, d1);
+    chargeVehicleApi.verifyCharge({plate: plate, location: loc1, time: d1, price: 1.09}, actual['args'], '11111111111');
+
+    actual = await chargeVehicleApi.chargeVehicle(plate, loc1, d2);
+    chargeVehicleApi.verifyCharge({plate: plate, location: loc1, time: d2, price: 2.09}, actual['args'], '222222222');
+
+    actual = await chargeVehicleApi.chargeVehicle(plate, loc2, d3);
+    chargeVehicleApi.verifyCharge({plate: plate, location: loc2, time: d3, price: 3.09}, actual['args'], '33333333333');
+
+    actual = await chargeVehicleApi.chargeVehicle(plate2, loc2, d4);
+    chargeVehicleApi.verifyCharge({plate: plate2, location: loc2, time: d4, price: 4.09}, actual['args'], '4444444444'); // PLATE2
 
 
-    /****************
-    // test post 2
-    actual = await tollApi.setToll(price2, location, timea2, timeb2);
-    tollApi.verifyTollJson(exp2, actual['args'], '222222222222');
+    // QUERY BY PLATE
+    actual = await chargeVehicleApi.getVehicleCharges({plate: plate});
+    chargeVehicleApi.verifyCharges([
+	    		          {plate: plate, location: loc1, time: d1, price: 1.09},
+	    		          {plate: plate, location: loc1, time: d2, price: 2.09},
+	    		          {plate: plate, location: loc2, time: d3, price: 3.09}
+    				], 
+			       actual['result'], '5555555555');
+
+    // QUERY BY PLATE SINCE DATE
+    actual = await chargeVehicleApi.getVehicleCharges({plate: plate, time1: (d1-1000)});
+    chargeVehicleApi.verifyCharges([
+	    		          {plate: plate, location: loc1, time: d1, price: 1.09},
+	    		          {plate: plate, location: loc1, time: d2, price: 2.09}
+    				], 
+			       actual['result'], '6666666666666');
 
 
+    // QUERY BY PLATE UNTIL DATE
+    actual = await chargeVehicleApi.getVehicleCharges({plate: plate, time2: (d1-1000)});
+    chargeVehicleApi.verifyCharges([
+	    		          {plate: plate, location: loc2, time: d3, price: 3.09}
+    				], 
+			       actual['result'], '7777777777');
+
+    // QUERY BY PLATE OVER DATE RANGE
+    actual = await chargeVehicleApi.getVehicleCharges({plate: plate, time1: (d3+1000), time2: (d1+1000)});
+    chargeVehicleApi.verifyCharges([
+	    		          {plate: plate, location: loc1, time: d1, price: 1.09}
+    				], 
+			       actual['result'], '8888888');
 
 
-    // VERIFY BY 3 QUERIES
-    // query first time slot
-    actual = await tollApi.getToll(location, 1100);
-    tollApi.verifyPrice(price1, actual['price'], '33333333333'); 
-    tollApi.verifyLocation(location, actual['args']['location'], '33333333333'); 
-
-    // query second time slot
-    actual = await tollApi.getToll(location, 1400);
-    tollApi.verifyPrice(price2, actual['price'], '4444444444');
-
-    // query outside both time slots
-    actual = await tollApi.getToll(location, 1900);
-    tollApi.verifyPrice(0, actual['price'], '55555555555');
+    // QUERY BY PLATE2
+    actual = await chargeVehicleApi.getVehicleCharges({plate: plate2});
+    chargeVehicleApi.verifyCharges([
+	    		          {plate: plate2, location: loc2, time: d4, price: 4.09}
+    				], 
+			       actual['result'], '999999999999');
 
 
-
-
-    // test delete (all tolls for a location)
-    actual = await tollApi.deleteTolls({location: location});
-    //console.log('actual = ', actual);
-    tollApi.verifyDelete({location: location}, actual['args'], '6666666666');
-
-    // test get/query 2 times (should return empty set)
-    actual = await tollApi.getToll(location, 1100);
-    tollApi.verifyPrice(0, actual['price'], '77777777');
-
-    actual = await tollApi.getToll(location, 1400);
-    tollApi.verifyPrice(0, actual['price'], '8888888888');
-     ***********/
+    // DELETE THE CAR CHARGES
+    actual = await chargeVehicleApi.deleteVehicleCharges({plate: plate});
+    actual = await chargeVehicleApi.deleteVehicleCharges({plate: plate2});
 
   });
 
