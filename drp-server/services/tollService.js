@@ -58,15 +58,15 @@ class TollService{
             MongoClient.connect(url, function(err, client) {
                 if(err) throw err;
                 assert.equal(null, err);
-                let tolls = []
-
                 var db = client.db("drpDb");
-                let result = db.collection('tollPrices').deleteMany(parms);
-                return self.res.status(200).json({
-                    status: 'delete tolls',
-	            args: parms,
-                    result: result 
-                })
+		db.collection('tollPrices').deleteMany(parms, (err, collection) => {
+                    if(err) throw err;
+                    return self.res.status(200).json({
+                        status: 'delete tolls',
+	                args: parms,
+                        result: collection.result.n 
+                    })
+		})
 
             });
         }
@@ -78,11 +78,8 @@ class TollService{
         }
     }
 
-
-    getToll(){
-        let self = this;
-	let location = this.req.params.loc;
-	let time = parseInt(this.req.params.time);
+    getToll_(location, time /*(number)*/, onSuccess, onError) {
+        
         try{
             MongoClient.connect(url, function(err, client) {
                 if(err) throw err;
@@ -98,23 +95,36 @@ class TollService{
                     if (doc != null) {
                         tolls.push(doc)
                     } else {
-                        return self.res.status(200).json({
+                        onSuccess({
                             status: 'get toll',
 			    args: {location: location, time: time},
                             result: tolls,
-		            doc: doc,
 		            price: tolls && tolls.length > 0 ? tolls[0].price : 0
-                        })
+			}); 
                     }
                 });
             });
         }
         catch(error){
-            return self.res.status(500).json({
+	    onError({
                 status: 'error',
                 error: error
-            })
+	    });
         }
+    }
+
+
+    getToll(){
+        let self = this;
+	let location = this.req.params.loc;
+	let time = parseInt(this.req.params.time);
+	let onSuccess = function(args) {
+            return self.res.status(200).json(args);
+	}
+	let onError = function(args) {
+	    return self.res.status(500).json(args);
+	}
+	this.getToll_(location, time, onSuccess, onError);
     }
 
 
