@@ -103,6 +103,11 @@ export class ChargeVehicleApi {
   }
 
 
+  verifyBalance(expected: any, actual: any, marker: string) {
+      this.verifyValue(expected, actual, 'balance', marker); 
+  }
+
+
   // IDENTICAL to api-toll.po.ts
   verifyValue(expected: any, actual: any, attr: string, marker: string) {
     var expType = typeof expected[attr];

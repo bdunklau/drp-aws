@@ -5,12 +5,39 @@ const url = "mongodb://172.31.28.156:27017";
 
 
 
-class TollService{
+class InitService{
     
     constructor(req, res){
         this.req = req
         this.res = res
     }
+
+
+    init() {
+        let self = this;
+	try {
+            MongoClient.connect(url, function(err, client) {
+		let results = [];
+                var db = client.db("drpDb");
+		db.createCollection('accountSummaries');
+		results.push('created collection: accountSummaries');
+		db.collection('accountSummaries').createIndex( { "plate": 1 }, { unique: true } );
+		results.push('create unique index on collections.plate');
+                client.close();
+		return self.res.status(200).json({
+                    status: 'InitService.init()',
+                    results: results
+                })
+            });
+	}
+	catch(error) {
+            return self.res.status(500).json({
+                status: 'error',
+                error: error
+            })
+	}
+    }
+
 
     insert(tollPrice, db, callback){
         db.collection('tollPrices').insertOne(tollPrice,
@@ -27,7 +54,7 @@ class TollService{
 	let timea = parseInt(this.req.body.timea);
 	let timeb = parseInt(this.req.body.timeb);
 	try {
-            MongoClient.connect(url, {useUnifiedTopology: true}, function(err, client) {
+            MongoClient.connect(url, function(err, client) {
                 var db = client.db("drpDb");
                 assert.equal(null, err);
 	        let tollPrice = {'price': price, 'location': location, 'timea': timea, 'timeb': timeb};
@@ -163,4 +190,4 @@ class TollService{
 
 
 }
-module.exports = TollService
+module.exports = InitService

@@ -51,15 +51,20 @@ describe('The ChargeVehicle API', () => {
     // CREATE 4 CHARGES
     actual = await chargeVehicleApi.chargeVehicle(plate, loc1, d1);
     chargeVehicleApi.verifyCharge({plate: plate, location: loc1, time: d1, price: 1.09}, actual['args'], '11111111111');
+    console.log('actual = ', actual);
+    chargeVehicleApi.verifyBalance({balance: 1.09}, actual, '111111111222222222');
 
     actual = await chargeVehicleApi.chargeVehicle(plate, loc1, d2);
     chargeVehicleApi.verifyCharge({plate: plate, location: loc1, time: d2, price: 2.09}, actual['args'], '222222222');
+    chargeVehicleApi.verifyBalance({balance: 3.18}, actual, '2222221111111');
 
     actual = await chargeVehicleApi.chargeVehicle(plate, loc2, d3);
     chargeVehicleApi.verifyCharge({plate: plate, location: loc2, time: d3, price: 3.09}, actual['args'], '33333333333');
+    chargeVehicleApi.verifyBalance({balance: 6.27}, actual, '3333331111111');
 
     actual = await chargeVehicleApi.chargeVehicle(plate2, loc2, d4);
     chargeVehicleApi.verifyCharge({plate: plate2, location: loc2, time: d4, price: 4.09}, actual['args'], '4444444444'); // PLATE2
+    chargeVehicleApi.verifyBalance({balance: 4.09}, actual, '4444441111111');
 
 
     // QUERY BY PLATE

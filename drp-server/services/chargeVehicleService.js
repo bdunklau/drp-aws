@@ -7,10 +7,11 @@ const url = "mongodb://172.31.28.156:27017";
 
 class ChargeVehicleService{
     
-    constructor(req, res, tollService){
+    constructor(req, res, tollService, accountSummaryService){
         this.req = req;
         this.res = res;
 	this.tollService = tollService;
+	this.accountSummaryService = accountSummaryService;
     }
 
     insert(vehicleCharge, db, callback){
@@ -19,6 +20,236 @@ class ChargeVehicleService{
             callback()      
         })
     }
+
+    tempInsert() {
+        let self = this;
+	let plate = this.req.params.plate;
+	let balance = parseFloat(this.req.params.balance);
+	try {
+            MongoClient.connect(url, function(err, client) {
+                var db = client.db("drpDb");
+                /*let results =*/ db.collection('accountSummaries')
+			.updateOne({plate: plate}, 
+				{$inc: {balance: balance}, $set: {plate: plate}}, 
+				{upsert: true}
+					/***********
+				, function(err, res2) {
+	                            client.close();
+		                    //.project({_id:0, balance: 1}); // <-- means just return the 'balance' field
+		
+		                    self.res.status(200).json({
+                                        status: 'temp insert'
+                                        , result: res2 
+                                    });
+
+				}
+					***********/
+			)
+                   
+			/*****
+	        client.close();
+		//.project({_id:0, balance: 1}); // <-- means just return the 'balance' field
+		
+		self.res.status(200).json({
+                    status: 'temp insert'
+                    //, result: results 
+                });
+		*****/
+		
+
+		let results = [];
+                let cursor = db.collection('accountSummaries').find({plate: plate})
+		    //.project({_id:0, balance: 1}); // <-- means just return the 'balance' field
+                if(!cursor) throw "no cursor";
+                cursor.each(function(err, doc) {
+                    if(err) throw err;
+                    assert.equal(err, null);
+                    if (doc != null) {
+                        results.push(doc); 
+                    } else {
+                        self.res.status(200).json({
+                            status: 'temp insert',
+                            args: 'no args here',
+                            result: results 
+                        });
+                    }
+                });
+		client.close();
+
+
+	    })
+	} catch(error) {
+            self.res.status(500).json({
+                status: 'error',
+                error: error
+            });
+
+	}
+    }
+
+    tempDelete() {
+        let self = this;
+	try {
+            MongoClient.connect(url, function(err, client) {
+                var db = client.db("drpDb");
+		let results = [];
+                db.collection('accountSummaries').deleteMany({}, function(ierr, obj) {
+		    if(err) throw err;
+                    self.res.status(200).json({
+                        status: 'temp delete',
+                        args: obj.result.n+' records deleted',
+                        result: results 
+                    });
+		 
+	            client.close();
+		})
+
+		    //.project({_id:0, balance: 1}); // <-- means just return the 'balance' field
+
+	    })
+	} catch(error) {
+            self.res.status(500).json({
+                status: 'error',
+                error: error
+            });
+
+	}
+    }
+
+    tempGet() {
+        let self = this;
+	try {
+            MongoClient.connect(url, function(err, client) {
+                var db = client.db("drpDb");
+		let results = [];
+                let cursor = db.collection('accountSummaries').find()
+		    //.project({_id:0, balance: 1}); // <-- means just return the 'balance' field
+                if(!cursor) throw "no cursor";
+                cursor.each(function(err, doc) {
+                    if(err) throw err;
+                    assert.equal(err, null);
+                    if (doc != null) {
+                        results.push(doc); 
+                    } else {
+                        self.res.status(200).json({
+                            status: 'get vehicle balance',
+                            args: 'no args here',
+                            result: results 
+                        });
+                    }
+                });
+
+	    })
+	} catch(error) {
+            self.res.status(500).json({
+                status: 'error',
+                error: error
+            });
+
+	}
+    }
+
+    tempAcc() {
+        let self = this;
+	let plate = this.req.params.plate;
+       
+        try{
+            MongoClient.connect(url, function(err, client) {
+                if(err) throw err;
+                assert.equal(null, err);
+		let balance = -1;
+
+                var db = client.db("drpDb");
+               db.collection.update(query, update, {upsert: true});
+
+
+		    db.collection('accountSummaries').updateOne({"plate": plate}, { $inc: {"balance": 5}}, function(err, res2) {
+			    let xxx = db.collection('accountSummaries').findOne({"plate": plate});
+                             
+			    //client.close();
+
+
+                //let cursor = db.collection('accountSummaries').find({plate: plate}, {"_id":0,  "plate":0});
+                let cursor = db.collection('accountSummaries').find({plate: plate})
+		    .project({_id:0, balance: 1}); // <-- means just return the 'balance' field
+                if(!cursor) throw "no cursor";
+                cursor.each(function(err, doc) {
+                    if(err) throw err;
+                    assert.equal(err, null);
+                    if (doc != null) {
+                        balance = doc; 
+                    } else {
+                        self.res.status(200).json({
+                            status: 'get vehicle balance',
+                            args: {plate: plate},
+                            result: balance
+                        });
+                    }
+                });
+
+
+
+
+                        
+
+			} );
+
+
+
+
+
+
+
+            });
+        }
+        catch(error){
+            self.res.status(500).json({
+                status: 'error',
+                error: error
+            });
+        }
+    }
+    
+
+    // get the balance for one vehicle
+    getAccountSummary() {
+        let self = this;
+	let plate = this.req.params.plate;
+       
+        try{
+            MongoClient.connect(url, function(err, client) {
+                if(err) throw err;
+                assert.equal(null, err);
+		let balance = -1;
+
+                var db = client.db("drpDb");
+                //let cursor = db.collection('accountSummaries').find({plate: plate}, {"_id":0,  "plate":0});
+                let cursor = db.collection('accountSummaries').find({plate: plate})
+		    .project({_id:0, balance: 1}); // <-- means just return the 'balance' field
+                if(!cursor) throw "no cursor";
+                cursor.each(function(err, doc) {
+                    if(err) throw err;
+                    assert.equal(err, null);
+                    if (doc != null) {
+                        balance = doc; 
+                    } else {
+                        self.res.status(200).json({
+                            status: 'get vehicle balance',
+                            args: {plate: plate},
+                            result: balance
+                        });
+                    }
+                });
+            });
+        }
+        catch(error){
+            self.res.status(500).json({
+                status: 'error',
+                error: error
+            });
+        }
+    }
+    
 
     // body/form parameters:  plate, location, time	
     chargeVehicle() {
@@ -37,13 +268,46 @@ class ChargeVehicleService{
                     var db = client.db("drpDb");
                     assert.equal(null, err);
 	            let vehicleCharge = {'plate': plate, 'price': args['price'], 'location': location, 'time': millis, 'date': date, 'millis': millis};
-                    self.insert(vehicleCharge, db, function(){
-                        client.close()
-                        return self.res.status(200).json({
-                            status: 'charge vehicle',
-			    // result: ?????  don't know what the result/return of the insert is
-	                    args: vehicleCharge
-                        })
+	            let balance = {balance: -1};
+                    self.insert(vehicleCharge, db, async function(){
+
+                        db.collection('accountSummaries').updateOne({"plate": plate}, { $inc: {"balance": args['price']}}, function(err, res2) {
+			    let xxx = db.collection('accountSummaries').findOne({"plate": plate});
+                             
+			    client.close();
+                        
+                            return self.res.status(200).json({
+                                status: 'charge vehicle',
+	                        args: vehicleCharge,
+		                //balance: res2.result 
+			        balance: 'check browser' 
+                            })
+			} );
+
+
+
+
+
+
+
+			/**********
+			if(!cursor) throw "no cursor";
+			cursor.each(function(err, doc) {
+			    if(err) throw err;
+                            if(doc != null) {
+          			balance = doc;
+			    } else {
+			        client.close();
+                                return self.res.status(200).json({
+                                    status: 'charge vehicle',
+	                            args: vehicleCharge,
+		                    balance: balance 
+                                })
+				
+			    }
+		    	})
+			************/
+
                     })
                 });
 	    }
