@@ -21,7 +21,7 @@ describe('The Toll API', () => {
 
 
   it('should be able to SET, GET, then DELETE tolls', async () => {
-    let price1 = 3.03; let price2 = 4.04;
+    let price1 = 303; let price2 = 404;
     let location = '3 Elm Ln';
     let timea1 = 900; let timea2 = 1300;
     let timeb1 = 1300; let timeb2 = 1700;

@@ -31,32 +31,8 @@ class ChargeVehicleService{
                 /*let results =*/ db.collection('accountSummaries')
 			.updateOne({plate: plate}, 
 				{$inc: {balance: balance}, $set: {plate: plate}}, 
-				{upsert: true}
-					/***********
-				, function(err, res2) {
-	                            client.close();
-		                    //.project({_id:0, balance: 1}); // <-- means just return the 'balance' field
-		
-		                    self.res.status(200).json({
-                                        status: 'temp insert'
-                                        , result: res2 
-                                    });
-
-				}
-					***********/
-			)
+				{upsert: true} )
                    
-			/*****
-	        client.close();
-		//.project({_id:0, balance: 1}); // <-- means just return the 'balance' field
-		
-		self.res.status(200).json({
-                    status: 'temp insert'
-                    //, result: results 
-                });
-		*****/
-		
-
 		let results = [];
                 let cursor = db.collection('accountSummaries').find({plate: plate})
 		    //.project({_id:0, balance: 1}); // <-- means just return the 'balance' field
@@ -268,9 +244,10 @@ class ChargeVehicleService{
                     var db = client.db("drpDb");
                     assert.equal(null, err);
 	            let vehicleCharge = {'plate': plate, 'price': args['price'], 'location': location, 'time': millis, 'date': date, 'millis': millis};
-	            let balance = {balance: -1};
+	            //let balance = {balance: -1};
                     self.insert(vehicleCharge, db, async function(){
 
+			    /*********************
                         db.collection('accountSummaries').updateOne({"plate": plate}, { $inc: {"balance": args['price']}}, function(err, res2) {
 			    let xxx = db.collection('accountSummaries').findOne({"plate": plate});
                              
@@ -283,30 +260,45 @@ class ChargeVehicleService{
 			        balance: 'check browser' 
                             })
 			} );
+                             ***************/
+
+
+
+                        /*let results =*/ db.collection('accountSummaries')
+		        .updateOne({plate: plate}, 
+				{$inc: {balance: args['price']}, $set: {plate: plate}}, 
+				{upsert: true} )
 
 
 
 
 
-
-
-			/**********
-			if(!cursor) throw "no cursor";
-			cursor.each(function(err, doc) {
-			    if(err) throw err;
-                            if(doc != null) {
-          			balance = doc;
-			    } else {
-			        client.close();
-                                return self.res.status(200).json({
+		        let results = [];
+                        let cursor = db.collection('accountSummaries').find({plate: plate})
+		            //.project({_id:0, balance: 1}); // <-- means just return the 'balance' field
+                        if(!cursor) throw "no cursor";
+                        cursor.each(function(err, doc) {
+                            if(err) throw err;
+                            assert.equal(err, null);
+                            if (doc != null) {
+                                results.push(doc); 
+                            } else {
+                                self.res.status(200).json({
                                     status: 'charge vehicle',
-	                            args: vehicleCharge,
-		                    balance: balance 
-                                })
-				
-			    }
-		    	})
-			************/
+                                    args: vehicleCharge,
+                                    result: results 
+                                });
+                            }
+                        });
+        		client.close();
+
+
+
+
+
+
+
+
 
                     })
                 });
@@ -339,6 +331,7 @@ class ChargeVehicleService{
                 if(err) throw err;
                 assert.equal(null, err);
                 var db = client.db("drpDb");
+		db.collection('accountSummaries').deleteOne(parms);
                 db.collection('vehicleCharges').deleteMany(parms, (err, collection) => {
                     if(err) throw err;
                     return self.res.status(200).json({
