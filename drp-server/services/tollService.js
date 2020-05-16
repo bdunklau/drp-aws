@@ -1,4 +1,4 @@
-
+const moment = require('moment');
 const assert = require('assert');
 const MongoClient = require('mongodb').MongoClient;
 const url = "mongodb://172.31.28.156:27017";
@@ -23,6 +23,7 @@ class TollService{
     setToll() {
         let self = this;
 	let price = parseFloat(this.req.body.price);
+	let city = this.req.body.city;
 	let location = this.req.body.location;
 	let timea = parseInt(this.req.body.timea);
 	let timeb = parseInt(this.req.body.timeb);
@@ -30,13 +31,13 @@ class TollService{
             MongoClient.connect(url, {useUnifiedTopology: true}, function(err, client) {
                 var db = client.db("drpDb");
                 assert.equal(null, err);
-	        let tollPrice = {'price': price, 'location': location, 'timea': timea, 'timeb': timeb};
+	        let tollPrice = {'price': price, 'city': city, 'location': location, 'timea': timea, 'timeb': timeb};
                 self.insert(tollPrice, db, function(){
                     client.close()
                     return self.res.status(200).json({
                         status: 'set toll',
 			// result: ?????  don't know what the result/return of the insert is
-	                args: {'price': price, 'location': location, 'timea': timea, 'timeb': timeb}
+	                args: {'price': price, 'city' :city , 'location': location, 'timea': timea, 'timeb': timeb}
                     })
                 })
             });
@@ -50,10 +51,42 @@ class TollService{
     }
 
 
+    getTollCount() {
+        let self = this;
+	let onSuccess = function(args) {
+            return self.res.status(200).json(args);
+	}
+	let onError = function(args) {
+	    return self.res.status(500).json(args);
+	}
+
+        try{
+            MongoClient.connect(url, function(err, client) {
+                if(err) throw err;
+                assert.equal(null, err);
+                let tolls = [];
+                var db = client.db("drpDb");
+                let count = db.collection('tollPrices').countDocuments();
+                onSuccess({
+                    status: 'get toll count',
+                    result: count
+		}); 
+
+            });
+        }
+        catch(error){
+	    onError({
+                status: 'error',
+                error: error
+	    });
+        }
+    }
+
+
     deleteTolls(){
         let self = this;
-	let location = this.req.body.location;
-	let parms = {location: location};    
+	let city = this.req.body.city;
+	let parms = {city: city};    
         try{
             MongoClient.connect(url, function(err, client) {
                 if(err) throw err;
@@ -78,16 +111,52 @@ class TollService{
         }
     }
 
-    getToll_(location, time /*(number)*/, onSuccess, onError) {
+
+    /*****
+     * Returns a list of tolls and the price of the first toll.
+     * This method kind of does double duty:  If we are looking for the price of a toll at a certain
+     * location and time, we will care more about the 'price' attribute that's returned.
+     *
+     * If we are wanting to review the toll schedule for a city or city/location, we will care
+     * more about the 'result' attribute
+     */
+    getToll_(parms) { //city, location, time /*(number)*/, onSuccess, onError) {
+	//var city; var location; var time /*number*/; var onSuccess; var onError;
         
+        //var args = {};
+	var query = {};
+
+	if(parms.city) {
+         //   args['city'] = parms.city;
+            query['city'] = parms.city;
+        }
+
+	if(parms.location) {
+            //args['location'] = parms.location;
+            query['location'] = parms.location;
+        }
+
+	if(parms.time) {
+           // args['time'] = parms.time;
+            let millis = parseInt(this.req.params.time);
+	    let time_hmm = parseInt(moment(millis).format('Hmm'));
+            query['timea'] = {$lt: time_hmm};
+            query['timeb'] = {$gt: time_hmm};
+	}
+
+	this.getToll_xxxx(parms, query);
+
+	    /*********
+	var onSuccess = parms['onSuccess'];
+	var onError = parms['onError'];
+
         try{
             MongoClient.connect(url, function(err, client) {
                 if(err) throw err;
                 assert.equal(null, err);
-                let tolls = []
-
+                let tolls = [];
                 var db = client.db("drpDb");
-                let cursor = db.collection('tollPrices').find({location: location,  timea: {$lt: time} , timeb: {$gt: time} });
+                let cursor = db.collection('tollPrices').find(query);
                 if(!cursor) throw "no cursor";
                 cursor.each(function(err, doc) {
                     if(err) throw err;
@@ -97,7 +166,7 @@ class TollService{
                     } else {
                         onSuccess({
                             status: 'get toll',
-			    args: {location: location, time: time},
+			    args: parms,
                             result: tolls,
 		            price: tolls && tolls.length > 0 ? tolls[0].price : 0
 			}); 
@@ -111,32 +180,29 @@ class TollService{
                 error: error
 	    });
         }
+	**************/
     }
 
 
-    getToll(){
-        let self = this;
-	let location = this.req.params.loc;
-	let time = parseInt(this.req.params.time);
-	let onSuccess = function(args) {
-            return self.res.status(200).json(args);
-	}
-	let onError = function(args) {
-	    return self.res.status(500).json(args);
-	}
-	this.getToll_(location, time, onSuccess, onError);
+    getToll_exactMatch(parms) {
+        
+	var query = {};
+	query['city'] = parms.city;
+        query['location'] = parms.location;
+	query['timea'] = parms.time;
+	query['timeb'] = parms.time2;
+	this.getToll_xxxx(parms, query);
     }
 
 
-    getTolls(){
-        let self = this;
+    getToll_xxxx(parms, query) {
         try{
             MongoClient.connect(url, function(err, client) {
                 if(err) throw err;
                 assert.equal(null, err);
-                let tolls = []
+                let tolls = [];
                 var db = client.db("drpDb");
-                let cursor = db.collection('tollPrices').find();
+                let cursor = db.collection('tollPrices').find(query);
                 if(!cursor) throw "no cursor";
                 cursor.each(function(err, doc) {
                     if(err) throw err;
@@ -144,20 +210,54 @@ class TollService{
                     if (doc != null) {
                         tolls.push(doc)
                     } else {
-                        return self.res.status(200).json({
-                            status: 'success',
-                            result: tolls
-                        })
+                        parms.onSuccess({
+                            status: 'get toll',
+			    args: parms,
+			    query: query,
+                            result: tolls,
+		            price: tolls && tolls.length > 0 ? tolls[0].price : 0
+			}); 
                     }
                 });
             });
         }
         catch(error){
-            return self.res.status(500).json({
+	    parms.onError({
                 status: 'error',
                 error: error
-            })
+	    });
         }
+    }
+
+
+    getToll(){
+        let self = this;
+	let onSuccess = function(args) {
+            return self.res.status(200).json(args);
+	}
+	let onError = function(args) {
+	    return self.res.status(500).json(args);
+	}
+
+	var parms = {};
+	parms['onSuccess'] = onSuccess;
+	parms['onError'] = onError;
+	if(this.req.params.city) parms['city'] = this.req.params.city;
+	if(this.req.params.location) parms['location'] = this.req.params.location;
+	if(this.req.params.time) parms['time'] = parseInt(this.req.params.time);
+	if(this.req.params.time2) parms['time2'] = parseInt(this.req.params.time2);
+
+        if(this.req.params.time2) {
+	    this.getToll_exactMatch(parms);
+	}
+	else {
+	    this.getToll_(parms);
+	}
+    }
+
+
+    getTolls() {
+        this.getToll();	
     }
 
 

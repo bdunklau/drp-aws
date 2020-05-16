@@ -16,13 +16,37 @@ app.post('/drpapi/set-toll', function (req, res) {
   tollServiceObj.setToll();
 })
 
-app.get('/drpapi/get-toll/:loc/:time', function (req, res) {
+// for test support
+app.get('/drpapi/get-toll-count', function (req, res) {
+  let tollServiceObj = new tollService(req, res);
+  tollServiceObj.getTollCount();
+})
+
+
+// get the toll at a time (millisec timestamp)
+app.get('/drpapi/get-toll/:city/:location/:time', function (req, res) {
+  let tollServiceObj = new tollService(req, res);
+  tollServiceObj.getToll();
+})
+
+// get the toll at this city, location and time range
+app.get('/drpapi/get-toll/:city/:location/:time/:time2', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   tollServiceObj.getToll();
 })
 
 
 app.get('/drpapi/get-tolls', function (req, res) {
+  let tollServiceObj = new tollService(req, res);
+  tollServiceObj.getTolls();
+})
+
+app.get('/drpapi/get-tolls/:city', function (req, res) {
+  let tollServiceObj = new tollService(req, res);
+  tollServiceObj.getTolls();
+})
+
+app.get('/drpapi/get-tolls/:city/:location', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   tollServiceObj.getTolls();
 })
@@ -39,6 +63,12 @@ app.post('/drpapi/charge-vehicle', function (req, res) {
 })
 
 app.get('/drpapi/get-vehicle-charges/:plate', function (req, res) {
+  let tollServiceObj = new tollService(req, res);
+  let chargeVehicleServiceObj = new chargeVehicleService(req, res, tollServiceObj);
+  chargeVehicleServiceObj.getVehicleCharges();
+})
+
+app.get('/drpapi/get-vehicle-charges/:plate/:city', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   let chargeVehicleServiceObj = new chargeVehicleService(req, res, tollServiceObj);
   chargeVehicleServiceObj.getVehicleCharges();

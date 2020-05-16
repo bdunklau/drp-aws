@@ -77,7 +77,7 @@ export class TollApi {
   }
 
 
-  verifyTollJson(expected: any /*{price: number, location: string, timea: number, timeb: number}*/,
+  verifySetToll(expected: any /*{price: number, location: string, timea: number, timeb: number}*/,
                  actual: any,
                  marker: string) {
  
@@ -86,6 +86,15 @@ export class TollApi {
         this.verifyValue(expected, actual, attr, marker); 
     })
 
+  }
+
+  verifyGetToll(expected: any, actual: any, marker: string) {
+      // verify the 'result' attribute, a list of results
+      expect(expected.length === actual['result'].length).toBeTruthy(`expected ${expected.length} record(s) in the result set but actually got ${actual['result'].length}`);  
+      _.each(expected, exp => {
+          var found = _.find(actual['result'], exp);
+          expect(found).toBeTruthy(`expected to find ${JSON.stringify(expected)} in ${JSON.stringify(actual['result'])} `);	      
+      })
   }
 
   verifyValue(expected: any, actual: any, attr: string, marker: string) {

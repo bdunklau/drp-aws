@@ -232,6 +232,7 @@ class ChargeVehicleService{
         let self = this;
 	let plate = this.req.body.plate;
 	let location = this.req.body.location;
+	let city = this.req.body.city;
 	let millis = parseInt(this.req.body.time);
 	let date = moment(millis).format('ddd, MMM Do YYYY, h:mm:ss a');
 	let time_hmm = parseInt(moment(millis).format('Hmm'));
@@ -243,7 +244,7 @@ class ChargeVehicleService{
                 MongoClient.connect(url, function(err, client) {
                     var db = client.db("drpDb");
                     assert.equal(null, err);
-	            let vehicleCharge = {'plate': plate, 'price': args['price'], 'location': location, 'time': millis, 'date': date, 'millis': millis};
+	            let vehicleCharge = {'plate': plate, 'city': city, 'price': args['price'], 'location': location, 'time': millis, 'date': date, 'millis': millis};
 	            //let balance = {balance: -1};
                     self.insert(vehicleCharge, db, async function(){
 
@@ -318,7 +319,7 @@ class ChargeVehicleService{
             })
 	}
 
-	this.tollService.getToll_(location, time_hmm, onSuccess, onError);
+	this.tollService.getToll_({city: city, location: location, time: time_hmm, onSuccess: onSuccess, onError: onError});
     }
 
 
@@ -356,24 +357,26 @@ class ChargeVehicleService{
         let self = this;
 	var queryParams;
 	let plate = this.req.params.plate;
+	let city = this.req.params.city;
 	var date1 = this.req.params.date1;
 	var date2 = this.req.params.date2;
 	var args = {};
-	if(date1) args['date1'];
-	if(date2) args['date2'];
+	if(date1) args['date1'] = date1;
+	if(date2) args['date2'] = date2;
+	if(city) args['city'] = city;
        
 	if(this.req.params.plate) {
             args['plate'] = this.req.params.plate;
 	    if(date1 && date2) 
-                queryParams = {$and: [{plate: plate}, {time: {$gt: parseInt(date1) }}, {time: {$lt: parseInt(date2) }} ] };
-	    else if(date1) queryParams = {$and: [{plate: plate}, {time: {$gt: parseInt(date1) }}  ] };
-	    else if(date2) queryParams = {$and: [{plate: plate}, {time: {$lt: parseInt(date2) }}  ] };
-	    else queryParams = {plate: plate};
+                queryParams = {$and: [{plate: plate}, {city: city}, {time: {$gt: parseInt(date1) }}, {time: {$lt: parseInt(date2) }} ] };
+	    else if(date1) queryParams = {$and: [{plate: plate}, {city: city}, {time: {$gt: parseInt(date1) }}  ] };
+	    else if(date2) queryParams = {$and: [{plate: plate}, {city: city}, {time: {$lt: parseInt(date2) }}  ] };
+	    else queryParams = {plate: plate, city: city};
 	}
 	else {  // no plate, search for all plates
-	    if(date1 && date2) queryParams = {$and: [ {time: {$gt: parseInt(date1) }}, {time: {$lt: parseInt(date2) }} ] };
-	    else if(date1) queryParams = {time: {$gt: parseInt(date1) }};
-	    else if(date2) queryParams = {time: {$lt: parseInt(date2) }};
+	    if(date1 && date2) queryParams = {$and: [ {city: city}, {time: {$gt: parseInt(date1) }}, {time: {$lt: parseInt(date2) }} ] };
+	    if(date1) queryParams = {$and: [ {city: city}, {time: {$gt: parseInt(date1) }} ] };
+	    if(date2) queryParams = {$and: [ {city: city}, {time: {$lt: parseInt(date2) }} ] };
 	}
 
 

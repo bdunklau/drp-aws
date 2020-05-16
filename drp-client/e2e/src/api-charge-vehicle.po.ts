@@ -11,9 +11,9 @@ export class ChargeVehicleApi {
 
   constructor() { }
 
-  async chargeVehicle(plate: string, location: string, date: number) {
+  async chargeVehicle(plate: string, city: string, location: string, date: number) {
     // let time = moment(date).format('Hmm');  //just the hours and mins 
-    return this.post(`${server}/charge-vehicle`, {plate: plate, location: location, time: date});
+    return this.post(`${server}/charge-vehicle`, {plate: plate, city: city, location: location, time: date});
   }
 
   async deleteVehicleCharges(args: any) {
@@ -45,6 +45,7 @@ export class ChargeVehicleApi {
   async getVehicleCharges(args: any) {
     var endpoint = `/get-vehicle-charges`
     if(args['plate']) endpoint += '/'+args['plate']
+    if(args['city']) endpoint += '/'+args['city']
     if(args['time1'] && args['time2']) endpoint += '/range/'+args['time1']+'/'+args['time2'];
     else if(args['time1']) endpoint += '/since/'+args['time1'];
     else if(args['time2']) endpoint += '/until/'+args['time2'];
@@ -75,7 +76,7 @@ export class ChargeVehicleApi {
     
 
     _.each(expecteds, expected => {
-	var theThing = {plate: expected['plate'], location: expected['location'], time: expected['time'], price: expected['price'] };
+	var theThing = {plate: expected['plate'], city: expected['city'], location: expected['location'], time: expected['time'], price: expected['price'] };
 	/*****
 	_.each(actuals, actual => {
 	    console.log(`${marker}:  looking for: ${JSON.stringify(actual)}`) 
@@ -95,7 +96,7 @@ export class ChargeVehicleApi {
                  actual: any,
                  marker: string) {
  
-    var attrs = ['plate', 'location', 'time', 'price'];
+    var attrs = ['plate', 'city', 'location', 'time', 'price'];
     _.each(attrs, attr => {
         this.verifyValue(expected, actual, attr, marker); 
     })
