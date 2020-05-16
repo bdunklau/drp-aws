@@ -1,6 +1,6 @@
 import { browser, logging, element, by, protractor } from 'protractor';
 //import { Api } from './api.po';
-import { TollApi } from './set-toll.po';
+import { TollApi } from './toll.po';
 //import { TestSupport } from './test-support.po';
 import * as _ from 'lodash';
 //import * as moment from 'moment';
