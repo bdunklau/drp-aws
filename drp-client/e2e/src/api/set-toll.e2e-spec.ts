@@ -38,6 +38,7 @@ describe('The set-toll API', () => {
     // Query for toll using: CityA, 3 Elm Ln from 900 to 1300
     actual = await tollApi.getToll(input1);
     tollApi.verifyGetToll([input1], actual, 'verifyGetToll: 11111');
+    tollApi.verifyPrice(input1.price, actual.price, 'verifyPrice: 1111');
 	// TAKE STUFF FROM BELOW AND PUT IT HERE - CODE TO DO A SIMPLE QUERY TO VERIFY    
 
     // delete all tolls in the city
