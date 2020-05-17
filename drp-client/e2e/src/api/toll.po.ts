@@ -12,9 +12,29 @@ export class TollApi {
 
   async getToll(args) { //city: string, location: string, time: number) {
     var timepart = '';
+    var locpart = '';
+    if(args.location) locpart = `/${args.location}`;
     if(args.time) timepart = `/${args.time}`;
     else if(args.timea && args.timeb) timepart = `/${args.timea}/${args.timeb}`;
-    var url = `${server}/get-toll/${args.city}/${args.location}${timepart}`    // +'&auth_key='+process.env.YOURVOTECOUNTS_AUTH_KEY;
+    var url = `${server}/get-toll/${args.city}${locpart}${timepart}`    // +'&auth_key='+process.env.YOURVOTECOUNTS_AUTH_KEY;
+    
+    return this.get(url);
+  }
+
+  async getTolls(args) { //city: string, location: string, time: number) {
+    var timepart = '';
+    var locpart = '';
+    if(args.location) locpart = `/${args.location}`;
+    if(args.time) timepart = `/${args.time}`;
+    else if(args.timea && args.timeb) timepart = `/${args.timea}/${args.timeb}`;
+    var url = `${server}/get-tolls/${args.city}${locpart}${timepart}`    // +'&auth_key='+process.env.YOURVOTECOUNTS_AUTH_KEY;
+  
+    return this.get(url);
+  }
+
+
+  async get(url) {
+    //console.log(`getToll: url = ${url}`);
     var flow = protractor.promise.controlFlow();
     var result = await flow.execute(function() {
         var defer = protractor.promise.defer();
@@ -28,7 +48,6 @@ export class TollApi {
     });
 
     return result;
-
   }
 
 
