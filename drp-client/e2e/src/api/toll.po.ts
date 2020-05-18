@@ -129,7 +129,11 @@ export class TollApi {
 
   verifyDelete(expected: any, actual: any, marker: string) {
     //expect(expected === actual).toBeTruthy(`expected location to be ${expected} but it was actually ${actual} ${marker}`);
-    this.verifyValue(expected, actual, 'location', marker); 
+
+    if(expected['city']) this.verifyValue(expected, actual, 'city', marker); 
+    if(expected['location']) this.verifyValue(expected, actual, 'location', marker); 
+    if(expected['timea']) this.verifyValue(expected, actual, 'timea', marker); 
+    if(expected['timeb']) this.verifyValue(expected, actual, 'timeb', marker); 
   }
 
   verifyLocation(expected: string, actual: string, marker: string) {
