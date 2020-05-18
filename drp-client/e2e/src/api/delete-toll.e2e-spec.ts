@@ -88,7 +88,7 @@ describe('The delete-toll API', () => {
       tollApi.verifyDelete({city: cityA, location: loc1, timea: time3, timeb: time4}, actual['args'], 'verifyDelete: 777777');
 
       actual = await tollApi.getTolls({city: cityA});
-      tollApi.verifyGetToll([input1, input3, input4], actual, 'verifyDelete: 555555555');
+      tollApi.verifyGetToll([input1, input3, input4], actual, 'verifyDelete: 8888888888');
 
   })
 
