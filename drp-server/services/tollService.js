@@ -86,7 +86,8 @@ class TollService{
     deleteTolls(){
         let self = this;
 	let city = this.req.body.city;
-	let parms = {city: city};    
+	var parms = {city: city};
+	if(this.req.body.location) parms['location'] = this.req.body.location;
         try{
             MongoClient.connect(url, function(err, client) {
                 if(err) throw err;
@@ -145,42 +146,6 @@ class TollService{
 	}
 
 	this.getToll_xxxx(parms, query);
-
-	    /*********
-	var onSuccess = parms['onSuccess'];
-	var onError = parms['onError'];
-
-        try{
-            MongoClient.connect(url, function(err, client) {
-                if(err) throw err;
-                assert.equal(null, err);
-                let tolls = [];
-                var db = client.db("drpDb");
-                let cursor = db.collection('tollPrices').find(query);
-                if(!cursor) throw "no cursor";
-                cursor.each(function(err, doc) {
-                    if(err) throw err;
-                    assert.equal(err, null);
-                    if (doc != null) {
-                        tolls.push(doc)
-                    } else {
-                        onSuccess({
-                            status: 'get toll',
-			    args: parms,
-                            result: tolls,
-		            price: tolls && tolls.length > 0 ? tolls[0].price : 0
-			}); 
-                    }
-                });
-            });
-        }
-        catch(error){
-	    onError({
-                status: 'error',
-                error: error
-	    });
-        }
-	**************/
     }
 
 

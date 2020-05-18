@@ -70,6 +70,19 @@ describe('The delete-toll API', () => {
   })
 
 
+  // @see https://github.com/bdunklau/drp-aws/wiki/TC-Delete-all-tolls-in-a-city-at-a-location
+  it('should be able to DELETE tolls in a city at a location', async () => {
+      actual = await tollApi.deleteTolls({city: cityA, location: loc1});
+      tollApi.verifyDelete({city: cityA, location: loc1}, actual['args'], 'verifyDelete: 4444444');
+
+      actual = await tollApi.getTolls({city: cityA});
+      tollApi.verifyGetToll([input3, input4], actual, 'verifyDelete: 555555555');
+
+      actual = await tollApi.getTolls({city: cityB});
+      tollApi.verifyGetToll([input5, input6], actual, 'verifyDelete: 666666666');
+  })
+
+
   afterEach(async () => {
     await tollApi.deleteTolls({city: cityA});
     await tollApi.deleteTolls({city: cityB});
