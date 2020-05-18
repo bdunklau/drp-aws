@@ -88,6 +88,8 @@ class TollService{
 	let city = this.req.body.city;
 	var parms = {city: city};
 	if(this.req.body.location) parms['location'] = this.req.body.location;
+	if(this.req.body.timea) parms['timea'] = parseInt(this.req.body.timea);
+	if(this.req.body.timeb) parms['timeb'] = parseInt(this.req.body.timeb);
         try{
             MongoClient.connect(url, function(err, client) {
                 if(err) throw err;
