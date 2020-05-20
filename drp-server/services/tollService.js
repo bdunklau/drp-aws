@@ -19,6 +19,15 @@ class TollService{
         })
     }
 
+	/********
+    update(tollPrice, db, callback){
+        db.collection('tollPrices').updateMany(tollPrice,
+        function(){
+            callback()      
+        })
+    }
+    ***********/
+
     // body/form parameters:  price, location, timea, timeb	
     setToll() {
         let self = this;
@@ -31,6 +40,7 @@ class TollService{
             MongoClient.connect(url, {useUnifiedTopology: true}, function(err, client) {
                 var db = client.db("drpDb");
                 assert.equal(null, err);
+		    /**********
 	        let tollPrice = {'price': price, 'city': city, 'location': location, 'timea': timea, 'timeb': timeb};
                 self.insert(tollPrice, db, function(){
                     client.close()
@@ -40,6 +50,28 @@ class TollService{
 	                args: {'price': price, 'city' :city , 'location': location, 'timea': timea, 'timeb': timeb}
                     })
                 })
+		*********/
+
+
+	        let query = {'city': city, 'location': location, 'timea': timea, 'timeb': timeb};
+		let update = {$set: {city: city, location: location, timea: timea, timeb: timeb, price: price}};
+               	db.collection('tollPrices').updateMany(query, update, {upsert: true}).then(result => {
+                	client.close()
+                	return self.res.status(200).json({
+                            status: 'set toll',
+	            	    result: result,
+	                    args: {'price': price, 'city' :city , 'location': location, 'timea': timea, 'timeb': timeb}
+                        })
+			
+		    })
+		    .catch(err => {
+			console.log(`error: ${err}`);
+                        return self.res.status(500).json({
+                            status: 'error',
+                            error: err
+                        })
+		    });
+
             });
 	}
 	catch(error) {
