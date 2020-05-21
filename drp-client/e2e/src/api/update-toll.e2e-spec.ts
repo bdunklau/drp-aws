@@ -13,6 +13,7 @@ describe('The update-toll API', () => {
   //let api: Api;
   //let testSupport: TestSupport;
 
+  /*******************
     let price1 = 303; let price2 = 404; let price3 = 505; let price4 = 606; let price5 = 707; let price6 = 808;
     let cityA = 'CityE'; let cityB = 'CityF';
     let loc1 = '111 XXX Ln'; let loc2 = '222 XXX Ln';
@@ -26,12 +27,14 @@ describe('The update-toll API', () => {
     var input4;
     var input5;
     var input6;
+   	*************/
 
 
   beforeEach(async () => {
     tollApi = new TollApi();
     //api = new Api({user:apiUser});
     //testSupport = new TestSupport(api);
+    /************
     input1 = {price: price1, city: cityA, location: loc1, timea: time1, timeb: time2};
     input2 = {price: price2, city: cityA, location: loc1, timea: time3, timeb: time4};
     input3 = {price: price3, city: cityA, location: loc2, timea: time1, timeb: time2};
@@ -45,6 +48,10 @@ describe('The update-toll API', () => {
     await tollApi.setToll(input4);
     await tollApi.setToll(input5);
     await tollApi.setToll(input6);
+        *************/
+
+       await tollApi.createCityASchedule();
+       await tollApi.createCityBSchedule();
   });
 
 
@@ -54,7 +61,7 @@ describe('The update-toll API', () => {
     var actual;
 
     // update 1 toll
-    var modified1 = input1;
+    var modified1 = tollApi.input1;
     modified1['price'] = 999;
     actual = await tollApi.setToll(modified1); // 'set' and 'update' are the same thing thanks to 'upsert:true'
     tollApi.verifySetToll(modified1, actual['args'], 'update toll: 1111111');
@@ -66,8 +73,8 @@ describe('The update-toll API', () => {
 
 
   afterEach(async () => {
-    await tollApi.deleteTolls({city: cityA});
-    await tollApi.deleteTolls({city: cityB});
+    await tollApi.deleteTolls({city: tollApi.cityA});
+    await tollApi.deleteTolls({city: tollApi.cityB});
 
     // Assert that there are no errors emitted from the browser
     const logs = await browser.manage().logs().get(logging.Type.BROWSER);
