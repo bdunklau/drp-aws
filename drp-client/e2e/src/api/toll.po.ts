@@ -8,7 +8,74 @@ const server = 'http://'+process.env.DRP_API_SERVER+':3000/drpapi';
 
 export class TollApi {
 
-  constructor() { }
+    price1:number; 
+    price2:number; 
+    price3:number; 
+    price4:number; 
+    price5:number; 
+    price6:number;
+    cityA:string; 
+    cityB:string;
+    loc1:string; 
+    loc2:string;
+    time1:number; 
+    time2:number;
+    time3:number; 
+    time4:number;
+    timestamp1:number;
+    timestamp2:number;
+
+    actual:any;
+    input1: {price:number, city:string, location:string, timea:number, timeb:number};
+    input2: {price:number, city:string, location:string, timea:number, timeb:number};
+    input3: {price:number, city:string, location:string, timea:number, timeb:number};
+    input4: {price:number, city:string, location:string, timea:number, timeb:number};
+    input5: {price:number, city:string, location:string, timea:number, timeb:number};
+    input6: {price:number, city:string, location:string, timea:number, timeb:number};
+    cityASchedule:any;
+    cityBSchedule:any;
+
+    constructor() { 
+        this.price1 = 303; 
+        this.price2 = 404; 
+        this.price3 = 505; 
+        this.price4 = 606; 
+        this.price5 = 707; 
+        this.price6 = 808;
+        this.cityA = 'CityA'; 
+        this.cityB = 'CityB';
+        this.loc1 = '3 Elm Ln'; 
+        this.loc2 = '505 Elm Ln';
+        this.time1 = 900; 
+        this.time2 = 1300;
+        this.time3 = 1300; 
+        this.time4 = 1700;
+        this.timestamp1 = 1465215250000;
+        this.timestamp2 = 1465195250000;
+
+        this.input1 = {price: this.price1, city: this.cityA, location: this.loc1, timea: this.time1, timeb: this.time2};
+        this.input2 = {price: this.price2, city: this.cityA, location: this.loc1, timea: this.time3, timeb: this.time4};
+        this.input3 = {price: this.price3, city: this.cityA, location: this.loc2, timea: this.time1, timeb: this.time2};
+        this.input4 = {price: this.price4, city: this.cityA, location: this.loc2, timea: this.time3, timeb: this.time4};
+        this.input5 = {price: this.price5, city: this.cityB, location: this.loc1, timea: this.time1, timeb: this.time2};
+        this.input6 = {price: this.price6, city: this.cityB, location: this.loc1, timea: this.time3, timeb: this.time4}; 
+
+        this.cityASchedule = [this.input1, this.input2, this.input3, this.input4];
+        this.cityBSchedule = [this.input5, this.input6];
+    }
+
+
+  async createCityASchedule() {
+      await this.setToll(this.input1);
+      await this.setToll(this.input2);
+      await this.setToll(this.input3);
+      await this.setToll(this.input4);
+  }
+
+  async createCityBSchedule() {
+      await this.setToll(this.input5);
+      await this.setToll(this.input6);
+  }
 
   async getToll(args) { //city: string, location: string, time: number) {
     var timepart = '';
@@ -28,7 +95,6 @@ export class TollApi {
     if(args.time) timepart = `/${args.time}`;
     else if(args.timea && args.timeb) timepart = `/${args.timea}/${args.timeb}`;
     var url = `${server}/get-tolls/${args.city}${locpart}${timepart}`    // +'&auth_key='+process.env.YOURVOTECOUNTS_AUTH_KEY;
-  
     return this.get(url);
   }
 
@@ -109,7 +175,7 @@ export class TollApi {
 
   verifyGetToll(expected: any, actual: any, marker: string) {
       // verify the 'result' attribute, a list of results
-      expect(expected.length === actual['result'].length).toBeTruthy(`expected ${expected.length} record(s) in the result set but actually got ${actual['result'].length}`);  
+      expect(expected.length === actual['result'].length).toBeTruthy(`expected ${expected.length} record(s) in the result set but actually got ${actual['result'].length}  ${marker}`);  
       _.each(expected, exp => {
           var found = _.find(actual['result'], exp);
           expect(found).toBeTruthy(`expected to find ${JSON.stringify(expected)} in ${JSON.stringify(actual['result'])} `);	      
