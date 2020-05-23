@@ -178,10 +178,6 @@ class TollService{
 	    let time_hmm = parseInt(xxxxx);
             query['timea'] = {$lt: time_hmm};
             query['timeb'] = {$gt: time_hmm};
-
-	    console.log('getToll_(): millis = ', millis);
-	    console.log('getToll_(): xxxxx = ', xxxxx);
-	    console.log('getToll_(): time_hmm = ', time_hmm);
 	}
 
 	this.getToll_xxxx(parms, query);
@@ -214,9 +210,6 @@ class TollService{
                     if (doc != null) {
                         tolls.push(doc)
                     } else {
-			console.log('getToll_xxxx():  parms = ', parms);
-			console.log('getToll_xxxx():  query = ', query);
-			console.log('getToll_xxxx():  tolls = ', tolls);
                         parms.onSuccess({
                             status: 'get toll',
 			    args: parms,

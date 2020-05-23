@@ -29,20 +29,51 @@ describe('The ChargeVehicle API', () => {
   // @see   https://github.com/bdunklau/drp-aws/wiki/TC-Charge-vehicle 
   it('should be able to charge a toll to a license plate', async () => { 
       var actual; 
-      // CREATE 4 CHARGES
-      var thetime = chargeVehicleApi.getTime(tollApi.time1 + 1) // 1 min after time1 
-      actual = await chargeVehicleApi.chargeVehicle(chargeVehicleApi.plate1, tollApi.cityC, tollApi.loc1, thetime); // 9:03am
+      var tollSched = tollApi.cityCSchedule;
+      // CREATE 3 CHARGES
+      var balance:number = 0; 
+      var thetime = chargeVehicleApi.getTime(tollSched[0]['timea'] + 1) // 1 min after time1 
+      actual = await chargeVehicleApi.chargeVehicle(chargeVehicleApi.plate1, tollSched[0]['city'], tollSched[0]['location'], thetime);
       chargeVehicleApi.verifyCharge({plate: chargeVehicleApi.plate1, 
-				      city: tollApi.cityC, 
-				      location: tollApi.loc1, 
+				      city: tollSched[0]['city'], 
+				      location: tollSched[0]['location'], 
 				      time: thetime, 
-				      price: tollApi.price7}, 
+				      price: tollSched[0]['price']}, 
 				    actual['args'], 
 				    '11111111111');
-      chargeVehicleApi.verifyBalance({balance: tollApi.price7}, actual['result'][0], '2222221111111');
-   
+      
+      balance += tollSched[0]['price'];
+      chargeVehicleApi.verifyBalance({balance: balance}, actual['result'][0], '2222221111111');
+  
 
 
+      var thetime = chargeVehicleApi.getTime(tollSched[1]['timea'] + 1) // 1 min after time1 
+      actual = await chargeVehicleApi.chargeVehicle(chargeVehicleApi.plate1, tollSched[1]['city'], tollSched[1]['location'], thetime);
+      chargeVehicleApi.verifyCharge({plate: chargeVehicleApi.plate1, 
+				      city: tollSched[1]['city'], 
+				      location: tollSched[1]['location'], 
+				      time: thetime, 
+				      price: tollSched[1]['price']}, 
+				    actual['args'], 
+				    '33333333333333');
+      
+      balance += tollSched[1]['price'];
+      chargeVehicleApi.verifyBalance({balance: balance}, actual['result'][0], '444444444444');
+
+
+
+      var thetime = chargeVehicleApi.getTime(tollSched[2]['timea'] + 1) // 1 min after time1 
+      actual = await chargeVehicleApi.chargeVehicle(chargeVehicleApi.plate1, tollSched[2]['city'], tollSched[2]['location'], thetime);
+      chargeVehicleApi.verifyCharge({plate: chargeVehicleApi.plate1, 
+				      city: tollSched[2]['city'], 
+				      location: tollSched[2]['location'], 
+				      time: thetime, 
+				      price: tollSched[2]['price']}, 
+				    actual['args'], 
+				    '555555555555');
+      
+      balance += tollSched[2]['price'];
+      chargeVehicleApi.verifyBalance({balance: balance}, actual['result'][0], '66666666666');
 
 
 

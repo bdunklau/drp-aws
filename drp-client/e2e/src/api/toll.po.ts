@@ -48,6 +48,7 @@ export class TollApi {
 
     cityASchedule:any;
     cityBSchedule:any;
+    cityCSchedule:any;
 
     constructor() { 
         this.price1 = 303; 
@@ -91,6 +92,7 @@ export class TollApi {
 
         this.cityASchedule = [this.input1, this.input2, this.input3, this.input4];
         this.cityBSchedule = [this.input5, this.input6];
+        this.cityCSchedule = [this.input7, this.input8, this.input9, this.input10];
     }
 
 
