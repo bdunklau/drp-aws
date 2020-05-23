@@ -17,8 +17,13 @@ export class ChargeVehicleApi {
       this.plate2 = '^^plate2^^';
   }
 
-  getTime(H: number, mm: number) {
-      return moment().set('hour', H).set('minute', mm).valueOf();  // 9am today
+  getTime(Hmm: number) {
+      var mm = Hmm % 100;
+      var zz = Hmm - mm;
+      var hr = zz / 100;
+
+      return moment().set('hour', hr).set('minute', mm).valueOf();
+      //return moment().set('hour', 9).set('minute', 9).valueOf();
   }
 
   async chargeVehicle(plate: string, city: string, location: string, date: number) {

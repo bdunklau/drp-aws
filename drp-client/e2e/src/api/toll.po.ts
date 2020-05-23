@@ -87,7 +87,6 @@ export class TollApi {
         this.input8 = {price: this.price8, city: this.cityC, location: this.loc1, timea: this.time3, timeb: this.time4}; 
         this.input9 = {price: this.price9, city: this.cityC, location: this.loc2, timea: this.time1, timeb: this.time2}; 
         this.input10 = {price: this.price10, city: this.cityC, location: this.loc2, timea: this.time3, timeb: this.time4}; 
-
 	
 
         this.cityASchedule = [this.input1, this.input2, this.input3, this.input4];

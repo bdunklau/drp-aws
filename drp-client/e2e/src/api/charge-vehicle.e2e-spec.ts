@@ -12,15 +12,6 @@ import * as moment from 'moment';
 describe('The ChargeVehicle API', () => {
   let chargeVehicleApi: ChargeVehicleApi;
   let tollApi: TollApi;
-     /************
-  let toll1: any;
-  let toll2: any;
-  let toll3: any;
-  let toll4: any;
-  let city: string;
-  let loc1 = '66 Main St';
-  let loc2 = '77 Main St';
-       ******/
   //let api: Api;
   //let testSupport: TestSupport;
 
@@ -34,10 +25,12 @@ describe('The ChargeVehicle API', () => {
     await tollApi.createCityCSchedule();
   });
 
+
+  // @see   https://github.com/bdunklau/drp-aws/wiki/TC-Charge-vehicle 
   it('should be able to charge a toll to a license plate', async () => { 
       var actual; 
       // CREATE 4 CHARGES
-      var thetime = chargeVehicleApi.getTime(9,3) // 9:03am
+      var thetime = chargeVehicleApi.getTime(tollApi.time1 + 1) // 1 min after time1 
       actual = await chargeVehicleApi.chargeVehicle(chargeVehicleApi.plate1, tollApi.cityC, tollApi.loc1, thetime); // 9:03am
       chargeVehicleApi.verifyCharge({plate: chargeVehicleApi.plate1, 
 				      city: tollApi.cityC, 
@@ -47,7 +40,14 @@ describe('The ChargeVehicle API', () => {
 				    actual['args'], 
 				    '11111111111');
       chargeVehicleApi.verifyBalance({balance: tollApi.price7}, actual['result'][0], '2222221111111');
-    
+   
+
+
+
+
+
+
+
       // DELETE THE CAR CHARGES
       actual = await chargeVehicleApi.deleteVehicleCharges({plate: chargeVehicleApi.plate1});
   })
