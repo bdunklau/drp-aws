@@ -9,9 +9,10 @@ import * as moment from 'moment';
 // These API tests primarily help us support the browser tests
 // In order to have confidence in those browser tests, we have to be confident that
 // the API calls are working correctly.  That's what these API tests are for.
-xdescribe('The ChargeVehicle API', () => {
+describe('The ChargeVehicle API', () => {
   let chargeVehicleApi: ChargeVehicleApi;
   let tollApi: TollApi;
+     /************
   let toll1: any;
   let toll2: any;
   let toll3: any;
@@ -19,25 +20,51 @@ xdescribe('The ChargeVehicle API', () => {
   let city: string;
   let loc1 = '66 Main St';
   let loc2 = '77 Main St';
+       ******/
   //let api: Api;
   //let testSupport: TestSupport;
 
-  /******************************8
   beforeEach(async () => {
     chargeVehicleApi = new ChargeVehicleApi();
     tollApi = new TollApi();
-    city = 'New York';
     //api = new Api({user:apiUser});
     //testSupport = new TestSupport(api);
 
     // SET UP: HAVE TO CREATE A TOLL SCHEDULE
-    toll1 = await tollApi.setToll(109, city, loc1, 800, 1000);
-    toll2 = await tollApi.setToll(209, city, loc1, 1000, 1200);
-    toll3 = await tollApi.setToll(309, city, loc2, 800, 1000);
-    toll4 = await tollApi.setToll(409, city, loc2, 1000, 1200);
+    await tollApi.createCityCSchedule();
   });
 
+  it('should be able to charge a toll to a license plate', async () => { 
+      var actual; 
+      // CREATE 4 CHARGES
+      var thetime = chargeVehicleApi.getTime(9,3) // 9:03am
+      actual = await chargeVehicleApi.chargeVehicle(chargeVehicleApi.plate1, tollApi.cityC, tollApi.loc1, thetime); // 9:03am
+      chargeVehicleApi.verifyCharge({plate: chargeVehicleApi.plate1, 
+				      city: tollApi.cityC, 
+				      location: tollApi.loc1, 
+				      time: thetime, 
+				      price: tollApi.price7}, 
+				    actual['args'], 
+				    '11111111111');
+      chargeVehicleApi.verifyBalance({balance: tollApi.price7}, actual['result'][0], '2222221111111');
+    
+      // DELETE THE CAR CHARGES
+      actual = await chargeVehicleApi.deleteVehicleCharges({plate: chargeVehicleApi.plate1});
+  })
 
+
+
+  afterEach(async () => {
+      await tollApi.deleteTolls({location: tollApi.loc1});
+      // await tollApi.deleteTolls({location: loc2});
+
+      // Assert that there are no errors emitted from the browser
+      const logs = await browser.manage().logs().get(logging.Type.BROWSER);
+      expect(logs).not.toContain(jasmine.objectContaining({
+        level: logging.Level.SEVERE,
+      } as logging.Entry));
+  });
+/*******************
   it('should be able to charge a toll to a license plate', async () => {
     let plate = 'SSS1234';
     let plate2 = 'PLATE2';

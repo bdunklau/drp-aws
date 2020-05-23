@@ -127,6 +127,11 @@ app.get('/drpapi/temp-init', function (req, res) {
   initServiceObj.init();
 })
 
+app.get('/drpapi/temp-time/:timestamp', function (req, res) {
+  let initServiceObj = new initService(req, res);
+  initServiceObj.getTime();
+})
+
 app.get('/drpapi/temp-insert/:plate/:balance', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   let chargeVehicleServiceObj = new chargeVehicleService(req, res, tollServiceObj);
@@ -139,5 +144,5 @@ app.get('/api/foo', function(req, res) {
 
 
 app.listen(port, "172.31.28.156", function () {
-  console.log(`Grocery Web app service listening on port ${port}!`)
+  console.log(`DRP Web app service listening on port ${port}!`)
 })

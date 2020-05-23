@@ -9,7 +9,17 @@ const server = 'http://'+process.env.DRP_API_SERVER+':3000/drpapi';
 
 export class ChargeVehicleApi {
 
-  constructor() { }
+  plate1:string;
+  plate2:string;
+      
+  constructor() { 
+      this.plate1 = '^^plate1^^';
+      this.plate2 = '^^plate2^^';
+  }
+
+  getTime(H: number, mm: number) {
+      return moment().set('hour', H).set('minute', mm).valueOf();  // 9am today
+  }
 
   async chargeVehicle(plate: string, city: string, location: string, date: number) {
     // let time = moment(date).format('Hmm');  //just the hours and mins 

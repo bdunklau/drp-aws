@@ -41,7 +41,7 @@ class InitService{
 
     getTime() {
         let millis = parseInt(this.req.params.timestamp);
-        let thetime = moment(millis).format('MM-DD-YYYY Hmm');
+        let thetime = moment(millis).format('MM-DD-YYYY Hmm:ss.SSS');
 	return this.res.status(200).json({status: 'get time', input: millis, time: thetime});
     }
 
