@@ -237,7 +237,7 @@ class ChargeVehicleService{
 	let date = moment(millis).format('ddd, MMM Do YYYY, h:mm:ss a');
 	//let time_hmm = parseInt(moment(millis).format('Hmm'));
 
-        console.log('chargeVehicle(): millis = ', millis);
+        //console.log('chargeVehicle(): millis = ', millis);
         //console.log('chargeVehicle(): date = ',date );
         //console.log('chargeVehicle(): time_hmm = ', time_hmm);
 
@@ -352,33 +352,59 @@ class ChargeVehicleService{
     }
 
 
-    getVehicleCharges() {
+    getVehicleChargesByPlate() {
+	var args = {
+	    plate: this.req.params.plate
+	};
+	var queryParams = args;
+	return this.getVehicleCharges(args, queryParams);
+    }
+
+
+    getVehicleChargesByPlateAndCity() {
+	var args = {
+	    plate: this.req.params.plate,
+            city: this.req.params.city
+	};
+	var queryParams = args;
+	return this.getVehicleCharges(args, queryParams);
+    }
+
+
+    getVehicleChargesByPlateSinceDate() {
+	var args = {
+	    plate: this.req.params.plate,
+            date1: this.req.params.date1
+	};
+        var queryParams = {$and: [{plate: this.req.params.plate}, {time: {$gt: parseInt(this.req.params.date1) }} ] };
+	return this.getVehicleCharges(args, queryParams);
+    }
+
+
+    getVehicleChargesByPlateUntilDate() {
+	var args = {
+	    plate: this.req.params.plate,
+	    date2: this.req.params.date2
+	};
+        var queryParams = {$and: [{plate: this.req.params.plate}, {time: {$lt: parseInt(this.req.params.date2) }} ] };
+	return this.getVehicleCharges(args, queryParams);
+
+    }
+
+
+    getVehicleChargesByPlateBetweenTwoDates() {
+	var args = {
+	    plate: this.req.params.plate,
+            date1: this.req.params.date1,
+	    date2: this.req.params.date2
+	};
+        var queryParams = {$and: [{plate: this.req.params.plate}, {time: {$gt: parseInt(this.req.params.date1) }}, {time: {$lt: parseInt(this.req.params.date2) }} ] };
+	return this.getVehicleCharges(args, queryParams);
+    }
+
+
+    getVehicleCharges(args, queryParams) {
         let self = this;
-	var queryParams;
-	let plate = this.req.params.plate;
-	let city = this.req.params.city;
-	var date1 = this.req.params.date1;
-	var date2 = this.req.params.date2;
-	var args = {};
-	if(date1) args['date1'] = date1;
-	if(date2) args['date2'] = date2;
-	if(city) args['city'] = city;
-       
-	if(this.req.params.plate) {
-            args['plate'] = this.req.params.plate;
-	    if(date1 && date2) 
-                queryParams = {$and: [{plate: plate}, {city: city}, {time: {$gt: parseInt(date1) }}, {time: {$lt: parseInt(date2) }} ] };
-	    else if(date1) queryParams = {$and: [{plate: plate}, {city: city}, {time: {$gt: parseInt(date1) }}  ] };
-	    else if(date2) queryParams = {$and: [{plate: plate}, {city: city}, {time: {$lt: parseInt(date2) }}  ] };
-	    else queryParams = {plate: plate, city: city};
-	}
-	else {  // no plate, search for all plates
-	    if(date1 && date2) queryParams = {$and: [ {city: city}, {time: {$gt: parseInt(date1) }}, {time: {$lt: parseInt(date2) }} ] };
-	    if(date1) queryParams = {$and: [ {city: city}, {time: {$gt: parseInt(date1) }} ] };
-	    if(date2) queryParams = {$and: [ {city: city}, {time: {$lt: parseInt(date2) }} ] };
-	}
-
-
         try{
             MongoClient.connect(url, function(err, client) {
                 if(err) throw err;

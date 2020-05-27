@@ -57,6 +57,55 @@ export class ChargeVehicleApi {
   }
 
 
+  async get(url) {
+    var flow = protractor.promise.controlFlow();
+    var result = await flow.execute(function() {
+        var defer = protractor.promise.defer();
+        request(url, function (error, response, body) {
+            if (!error && response.statusCode === 200) {
+                defer.fulfill(JSON.parse(body));
+            }
+        });
+
+        return defer.promise;
+    });
+
+    return result;
+  }
+
+
+  async getVehicleChargesByPlate(plate) {
+    var url = `${server}/get-vehicle-charges/${plate}`    // +'&auth_key='+process.env.YOURVOTECOUNTS_AUTH_KEY;
+    console.log(`getVehicleChargesByPlate: url = ${url}`)
+    return await this.get(url);    
+  }
+
+
+  async getVehicleChargesByPlateAndCity(plate, city) {
+    var url = `${server}/get-vehicle-charges/${plate}/${city}`    // +'&auth_key='+process.env.YOURVOTECOUNTS_AUTH_KEY;
+    return await this.get(url);    
+  }
+
+
+  async getVehicleChargesByPlateSinceDate(plate, date1) {
+    var url = `${server}/get-vehicle-charges/${plate}/since/${date1}`    // +'&auth_key='+process.env.YOURVOTECOUNTS_AUTH_KEY;
+    return await this.get(url);    
+  }
+
+
+  async getVehicleChargesByPlateUntilDate(plate, date2) {
+    var url = `${server}/get-vehicle-charges/${plate}/until/${date2}`    // +'&auth_key='+process.env.YOURVOTECOUNTS_AUTH_KEY;
+    return await this.get(url);    
+  }
+
+
+  async getVehicleChargesByPlateBetweenTwoDates(plate, date1, date2) {
+    var url = `${server}/get-vehicle-charges/${plate}/range/${date1}/${date2}`    // +'&auth_key='+process.env.YOURVOTECOUNTS_AUTH_KEY;
+    return await this.get(url);    
+  }
+
+
+     /********
   async getVehicleCharges(args: any) {
     var endpoint = `/get-vehicle-charges`
     if(args['plate']) endpoint += '/'+args['plate']
@@ -80,6 +129,7 @@ export class ChargeVehicleApi {
     return result;
 
   }
+       **********/
 
 
   verifyCharges(expecteds: any,
@@ -87,7 +137,7 @@ export class ChargeVehicleApi {
                  marker: string) {
 
     expect(expecteds.length === actuals.length)
-    	.toBeTruthy(`expected size of result set to be ${expecteds.length} but it was actually ${actuals.length}  ${marker}`);
+    	.toBeTruthy(`expected size of result set to be ${expecteds.length} but it was actually ${actuals.length}  ${marker} \nHERE ARE THE EXPECTEDS:\n${JSON.stringify(expecteds)}\nHERE ARE THE ACTUALS:\n${JSON.stringify(actuals)}`);
     
 
     _.each(expecteds, expected => {
@@ -99,7 +149,7 @@ export class ChargeVehicleApi {
        *****/
     	var found = _.find(actuals, theThing ); 
     	if(!found) {
-	    fail(`${marker}: Could not find this in the actuals: ${JSON.stringify(theThing)}`);
+	    fail(`${marker}: Could not find this in the actuals: ${JSON.stringify(theThing)} HERE ARE THE ACTUALS: ${JSON.stringify(actuals)}`);
 	}
     })
 

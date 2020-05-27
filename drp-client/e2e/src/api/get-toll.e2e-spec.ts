@@ -25,7 +25,7 @@ describe('The get-toll API', () => {
 
 
   // @see  https://github.com/bdunklau/drp-aws/wiki/TC-Get-toll-in-city-at-location-at-a-time
-  it('should be able to GET a toll', async () => {
+  it('should be able to GET a toll in a city at a location at a time', async () => {
     var actual;
 
     // Query for toll
@@ -40,6 +40,21 @@ describe('The get-toll API', () => {
     actual = await tollApi.getToll(query0);
     tollApi.verifyGetToll([], actual, 'verifyGetToll: 222222');
     tollApi.verifyPrice(0, actual.price, 'verifyPrice: 22222');
+    
+  })
+
+  // @see  https://github.com/bdunklau/drp-aws/wiki/TC-Get-toll-in-city-at-location-at-a-time
+  it('should be able to GET a toll - exact match (city,location,time1,time2)', async () => {
+    var actual;
+
+    // Query for toll
+    let query = {city: tollApi.cityBSchedule[1]['city'], 
+	          location: tollApi.cityBSchedule[1]['location'], 
+                  timea: tollApi.cityBSchedule[1]['timea'],
+                  timeb: tollApi.cityBSchedule[1]['timeb']};
+    actual = await tollApi.getToll(query);
+    tollApi.verifyGetToll([tollApi.cityBSchedule[1]], actual, 'verifyGetToll: 777777777');
+    tollApi.verifyPrice(tollApi.cityBSchedule[1]['price'], actual.price, 'verifyPrice: 88888888');
     
   })
 
