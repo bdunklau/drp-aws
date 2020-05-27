@@ -173,8 +173,9 @@ class TollService{
 
 	if(parms.time) {
            // args['time'] = parms.time;
-            let millis = parseInt(this.req.params.time);
-	    let time_hmm = parseInt(moment(millis).format('Hmm'));
+            let millis = parms.time;
+	    let xxxxx = moment(millis).format('Hmm');
+	    let time_hmm = parseInt(xxxxx);
             query['timea'] = {$lt: time_hmm};
             query['timeb'] = {$gt: time_hmm};
 	}

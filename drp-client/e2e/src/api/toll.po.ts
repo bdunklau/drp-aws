@@ -14,14 +14,23 @@ export class TollApi {
     price4:number; 
     price5:number; 
     price6:number;
+    price7:number;
+    price8:number;
+    price9:number;
+    price10:number; 
+
     cityA:string; 
     cityB:string;
+    cityC:string;
     loc1:string; 
     loc2:string;
+    loc3:string;
     time1:number; 
     time2:number;
     time3:number; 
     time4:number;
+    time5:number;
+    time6:number;
     timestamp1:number;
     timestamp2:number;
 
@@ -32,8 +41,14 @@ export class TollApi {
     input4: {price:number, city:string, location:string, timea:number, timeb:number};
     input5: {price:number, city:string, location:string, timea:number, timeb:number};
     input6: {price:number, city:string, location:string, timea:number, timeb:number};
+    input7: {price:number, city:string, location:string, timea:number, timeb:number};
+    input8: {price:number, city:string, location:string, timea:number, timeb:number};
+    input9: {price:number, city:string, location:string, timea:number, timeb:number};
+    input10: {price:number, city:string, location:string, timea:number, timeb:number};
+
     cityASchedule:any;
     cityBSchedule:any;
+    cityCSchedule:any;
 
     constructor() { 
         this.price1 = 303; 
@@ -42,14 +57,24 @@ export class TollApi {
         this.price4 = 606; 
         this.price5 = 707; 
         this.price6 = 808;
+        this.price7 = 777;
+        this.price8 = 888;
+        this.price9 = 999;
+        this.price10 = 1010;
+
         this.cityA = 'CityA'; 
         this.cityB = 'CityB';
+        this.cityC = 'CityC';
+
         this.loc1 = '3 Elm Ln'; 
         this.loc2 = '505 Elm Ln';
         this.time1 = 900; 
         this.time2 = 1300;
         this.time3 = 1300; 
         this.time4 = 1700;
+        this.time5 = 1700;
+        this.time6 = 2200;
+
         this.timestamp1 = 1465215250000;
         this.timestamp2 = 1465195250000;
 
@@ -59,9 +84,15 @@ export class TollApi {
         this.input4 = {price: this.price4, city: this.cityA, location: this.loc2, timea: this.time3, timeb: this.time4};
         this.input5 = {price: this.price5, city: this.cityB, location: this.loc1, timea: this.time1, timeb: this.time2};
         this.input6 = {price: this.price6, city: this.cityB, location: this.loc1, timea: this.time3, timeb: this.time4}; 
+        this.input7 = {price: this.price7, city: this.cityC, location: this.loc1, timea: this.time1, timeb: this.time2}; 
+        this.input8 = {price: this.price8, city: this.cityC, location: this.loc1, timea: this.time3, timeb: this.time4}; 
+        this.input9 = {price: this.price9, city: this.cityC, location: this.loc2, timea: this.time1, timeb: this.time2}; 
+        this.input10 = {price: this.price10, city: this.cityC, location: this.loc2, timea: this.time3, timeb: this.time4}; 
+	
 
         this.cityASchedule = [this.input1, this.input2, this.input3, this.input4];
         this.cityBSchedule = [this.input5, this.input6];
+        this.cityCSchedule = [this.input7, this.input8, this.input9, this.input10];
     }
 
 
@@ -75,6 +106,13 @@ export class TollApi {
   async createCityBSchedule() {
       await this.setToll(this.input5);
       await this.setToll(this.input6);
+  }
+
+  async createCityCSchedule() {
+      await this.setToll(this.input7);
+      await this.setToll(this.input8);
+      await this.setToll(this.input9);
+      await this.setToll(this.input10);
   }
 
   async getToll(args) { //city: string, location: string, time: number) {

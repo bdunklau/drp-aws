@@ -11,6 +11,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended : false}));
 
 
+// @see  https://github.com/bdunklau/drp-aws/wiki/API-drpapi-set-toll
 app.post('/drpapi/set-toll', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   tollServiceObj.setToll();
@@ -24,72 +25,94 @@ app.get('/drpapi/get-toll-count', function (req, res) {
 
 
 // get the toll at a time (millisec timestamp)
+// @see  https://github.com/bdunklau/drp-aws/wiki/API--drpapi-get-toll#drpapiget-tollcitylocationtime
 app.get('/drpapi/get-toll/:city/:location/:time', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   tollServiceObj.getToll();
 })
 
 // get the toll at this city, location and time range
+// @see  https://github.com/bdunklau/drp-aws/wiki/API--drpapi-get-toll#drpapiget-tollcitylocationtimetime2
 app.get('/drpapi/get-toll/:city/:location/:time/:time2', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   tollServiceObj.getToll();
 })
 
-
+/************ don't support returning the whole collection
 app.get('/drpapi/get-tolls', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   tollServiceObj.getTolls();
 })
+************/
 
+
+// @see  https://github.com/bdunklau/drp-aws/wiki/API--drpapi-get-tolls#drpapiget-tollscity
 app.get('/drpapi/get-tolls/:city', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   tollServiceObj.getTolls();
 })
 
+
+
+// @see  https://github.com/bdunklau/drp-aws/wiki/API--drpapi-get-tolls#drpapiget-tollscitylocation
 app.get('/drpapi/get-tolls/:city/:location', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   tollServiceObj.getTolls();
 })
 
+
+// @see   https://github.com/bdunklau/drp-aws/wiki/API--drpapi-delete-tolls
 app.post('/drpapi/delete-tolls', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   tollServiceObj.deleteTolls();
 })
 
+
+// @see  https://github.com/bdunklau/drp-aws/wiki/API--drpapi-charge-vehicle
 app.post('/drpapi/charge-vehicle', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   let chargeVehicleServiceObj = new chargeVehicleService(req, res, tollServiceObj);
   chargeVehicleServiceObj.chargeVehicle();
 })
 
+
+// @see  https://github.com/bdunklau/drp-aws/wiki/API--drpapi-get-vehicle-charges
 app.get('/drpapi/get-vehicle-charges/:plate', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   let chargeVehicleServiceObj = new chargeVehicleService(req, res, tollServiceObj);
-  chargeVehicleServiceObj.getVehicleCharges();
+  chargeVehicleServiceObj.getVehicleChargesByPlate();
 })
 
+
+// @see  https://github.com/bdunklau/drp-aws/wiki/API--drpapi-get-vehicle-charges
 app.get('/drpapi/get-vehicle-charges/:plate/:city', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   let chargeVehicleServiceObj = new chargeVehicleService(req, res, tollServiceObj);
-  chargeVehicleServiceObj.getVehicleCharges();
+  chargeVehicleServiceObj.getVehicleChargesByPlateAndCity();
 })
 
+
+// @see  https://github.com/bdunklau/drp-aws/wiki/API--drpapi-get-vehicle-charges
 app.get('/drpapi/get-vehicle-charges/:plate/since/:date1', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   let chargeVehicleServiceObj = new chargeVehicleService(req, res, tollServiceObj);
-  chargeVehicleServiceObj.getVehicleCharges();
+  chargeVehicleServiceObj.getVehicleChargesByPlateSinceDate();
 })
 
+
+// @see  https://github.com/bdunklau/drp-aws/wiki/API--drpapi-get-vehicle-charges
 app.get('/drpapi/get-vehicle-charges/:plate/until/:date2', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   let chargeVehicleServiceObj = new chargeVehicleService(req, res, tollServiceObj);
-  chargeVehicleServiceObj.getVehicleCharges();
+  chargeVehicleServiceObj.getVehicleChargesByPlateUntilDate();
 })
 
+
+// @see  https://github.com/bdunklau/drp-aws/wiki/API--drpapi-get-vehicle-charges
 app.get('/drpapi/get-vehicle-charges/:plate/range/:date1/:date2', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   let chargeVehicleServiceObj = new chargeVehicleService(req, res, tollServiceObj);
-  chargeVehicleServiceObj.getVehicleCharges();
+  chargeVehicleServiceObj.getVehicleChargesByPlateBetweenTwoDates();
 })
 
 app.post('/drpapi/delete-vehicle-charges', function (req, res) {
@@ -127,6 +150,11 @@ app.get('/drpapi/temp-init', function (req, res) {
   initServiceObj.init();
 })
 
+app.get('/drpapi/temp-time/:timestamp', function (req, res) {
+  let initServiceObj = new initService(req, res);
+  initServiceObj.getTime();
+})
+
 app.get('/drpapi/temp-insert/:plate/:balance', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   let chargeVehicleServiceObj = new chargeVehicleService(req, res, tollServiceObj);
@@ -139,5 +167,5 @@ app.get('/api/foo', function(req, res) {
 
 
 app.listen(port, "172.31.28.156", function () {
-  console.log(`Grocery Web app service listening on port ${port}!`)
+  console.log(`DRP Web app service listening on port ${port}!`)
 })

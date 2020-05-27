@@ -235,7 +235,11 @@ class ChargeVehicleService{
 	let city = this.req.body.city;
 	let millis = parseInt(this.req.body.time);
 	let date = moment(millis).format('ddd, MMM Do YYYY, h:mm:ss a');
-	let time_hmm = parseInt(moment(millis).format('Hmm'));
+	//let time_hmm = parseInt(moment(millis).format('Hmm'));
+
+        //console.log('chargeVehicle(): millis = ', millis);
+        //console.log('chargeVehicle(): date = ',date );
+        //console.log('chargeVehicle(): time_hmm = ', time_hmm);
 
 	let onSuccess = function(args) {
             // status, args, result, price <- these are the keys of args
@@ -269,36 +273,31 @@ class ChargeVehicleService{
 		        .updateOne({plate: plate}, 
 				{$inc: {balance: args['price']}, $set: {plate: plate}}, 
 				{upsert: true} )
-
-
-
-
-
-		        let results = [];
-                        let cursor = db.collection('accountSummaries').find({plate: plate})
+		        .then(doc => {
+				/********
+                            console.log('chargeVehicle(): updateOne -> doc.matchedCount = ', doc.matchedCount);
+                            console.log('chargeVehicle(): updateOne -> doc.modifiedCount = ', doc.modifiedCount);
+                            console.log('chargeVehicle(): updateOne -> doc.upsertedId = ', doc.upsertedId);
+                                  *********/
+		            let results = [];
+                            let cursor = db.collection('accountSummaries').find({plate: plate})
 		            //.project({_id:0, balance: 1}); // <-- means just return the 'balance' field
-                        if(!cursor) throw "no cursor";
-                        cursor.each(function(err, doc) {
-                            if(err) throw err;
-                            assert.equal(err, null);
-                            if (doc != null) {
-                                results.push(doc); 
-                            } else {
-                                self.res.status(200).json({
-                                    status: 'charge vehicle',
-                                    args: vehicleCharge,
-                                    result: results 
-                                });
-                            }
-                        });
-        		client.close();
-
-
-
-
-
-
-
+                            if(!cursor) throw "no cursor";
+                            cursor.each(function(err, doc) {
+                                if(err) throw err;
+                                assert.equal(err, null);
+                                if (doc != null) {
+                                    results.push(doc); 
+                                } else {
+                                    self.res.status(200).json({
+                                        status: 'charge vehicle',
+                                        args: vehicleCharge,
+                                        result: results 
+                                    });
+                                }
+                            });
+                            client.close();
+		        })
 
 
                     })
@@ -319,7 +318,7 @@ class ChargeVehicleService{
             })
 	}
 
-	this.tollService.getToll_({city: city, location: location, time: time_hmm, onSuccess: onSuccess, onError: onError});
+	this.tollService.getToll_({city: city, location: location, time: millis, onSuccess: onSuccess, onError: onError});
     }
 
 
@@ -353,33 +352,59 @@ class ChargeVehicleService{
     }
 
 
-    getVehicleCharges() {
+    getVehicleChargesByPlate() {
+	var args = {
+	    plate: this.req.params.plate
+	};
+	var queryParams = args;
+	return this.getVehicleCharges(args, queryParams);
+    }
+
+
+    getVehicleChargesByPlateAndCity() {
+	var args = {
+	    plate: this.req.params.plate,
+            city: this.req.params.city
+	};
+	var queryParams = args;
+	return this.getVehicleCharges(args, queryParams);
+    }
+
+
+    getVehicleChargesByPlateSinceDate() {
+	var args = {
+	    plate: this.req.params.plate,
+            date1: this.req.params.date1
+	};
+        var queryParams = {$and: [{plate: this.req.params.plate}, {time: {$gt: parseInt(this.req.params.date1) }} ] };
+	return this.getVehicleCharges(args, queryParams);
+    }
+
+
+    getVehicleChargesByPlateUntilDate() {
+	var args = {
+	    plate: this.req.params.plate,
+	    date2: this.req.params.date2
+	};
+        var queryParams = {$and: [{plate: this.req.params.plate}, {time: {$lt: parseInt(this.req.params.date2) }} ] };
+	return this.getVehicleCharges(args, queryParams);
+
+    }
+
+
+    getVehicleChargesByPlateBetweenTwoDates() {
+	var args = {
+	    plate: this.req.params.plate,
+            date1: this.req.params.date1,
+	    date2: this.req.params.date2
+	};
+        var queryParams = {$and: [{plate: this.req.params.plate}, {time: {$gt: parseInt(this.req.params.date1) }}, {time: {$lt: parseInt(this.req.params.date2) }} ] };
+	return this.getVehicleCharges(args, queryParams);
+    }
+
+
+    getVehicleCharges(args, queryParams) {
         let self = this;
-	var queryParams;
-	let plate = this.req.params.plate;
-	let city = this.req.params.city;
-	var date1 = this.req.params.date1;
-	var date2 = this.req.params.date2;
-	var args = {};
-	if(date1) args['date1'] = date1;
-	if(date2) args['date2'] = date2;
-	if(city) args['city'] = city;
-       
-	if(this.req.params.plate) {
-            args['plate'] = this.req.params.plate;
-	    if(date1 && date2) 
-                queryParams = {$and: [{plate: plate}, {city: city}, {time: {$gt: parseInt(date1) }}, {time: {$lt: parseInt(date2) }} ] };
-	    else if(date1) queryParams = {$and: [{plate: plate}, {city: city}, {time: {$gt: parseInt(date1) }}  ] };
-	    else if(date2) queryParams = {$and: [{plate: plate}, {city: city}, {time: {$lt: parseInt(date2) }}  ] };
-	    else queryParams = {plate: plate, city: city};
-	}
-	else {  // no plate, search for all plates
-	    if(date1 && date2) queryParams = {$and: [ {city: city}, {time: {$gt: parseInt(date1) }}, {time: {$lt: parseInt(date2) }} ] };
-	    if(date1) queryParams = {$and: [ {city: city}, {time: {$gt: parseInt(date1) }} ] };
-	    if(date2) queryParams = {$and: [ {city: city}, {time: {$lt: parseInt(date2) }} ] };
-	}
-
-
         try{
             MongoClient.connect(url, function(err, client) {
                 if(err) throw err;
