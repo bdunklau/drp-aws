@@ -139,6 +139,7 @@ describe('The get-vehicle-charges API', () => {
   afterEach(async () => {
       // DELETE THE CAR CHARGES
       await chargeVehicleApi.deleteVehicleCharges({plate: chargeVehicleApi.plate1});
+      await chargeVehicleApi.deleteVehicleCharges({plate: chargeVehicleApi.plate2});
 
       await tollApi.deleteTolls({location: tollApi.loc1});
 
