@@ -76,7 +76,6 @@ export class ChargeVehicleApi {
 
   async getVehicleChargesByPlate(plate) {
     var url = `${server}/get-vehicle-charges/${plate}`    // +'&auth_key='+process.env.YOURVOTECOUNTS_AUTH_KEY;
-    console.log(`getVehicleChargesByPlate: url = ${url}`)
     return await this.get(url);    
   }
 
@@ -105,32 +104,6 @@ export class ChargeVehicleApi {
   }
 
 
-     /********
-  async getVehicleCharges(args: any) {
-    var endpoint = `/get-vehicle-charges`
-    if(args['plate']) endpoint += '/'+args['plate']
-    if(args['city']) endpoint += '/'+args['city']
-    if(args['time1'] && args['time2']) endpoint += '/range/'+args['time1']+'/'+args['time2'];
-    else if(args['time1']) endpoint += '/since/'+args['time1'];
-    else if(args['time2']) endpoint += '/until/'+args['time2'];
-    var url = `${server}${endpoint}`    // +'&auth_key='+process.env.YOURVOTECOUNTS_AUTH_KEY;
-    var flow = protractor.promise.controlFlow();
-    var result = await flow.execute(function() {
-        var defer = protractor.promise.defer();
-        request(url, function (error, response, body) {
-            if (!error && response.statusCode === 200) {
-                defer.fulfill(JSON.parse(body));
-            }
-        });
-
-        return defer.promise;
-    });
-
-    return result;
-
-  }
-       **********/
-
 
   verifyCharges(expecteds: any,
                  actuals: any,
@@ -154,6 +127,12 @@ export class ChargeVehicleApi {
     })
 
 
+  }
+
+
+  verifyChargesDeleted(expected: number, actual: any, marker: string) {
+      var actualType = typeof actual;
+      expect(expected === parseInt(actual)).toBeTruthy(`Expected the number of deleted charges=${expected} but actual value=${actual} (type: ${actualType})`);
   }
 
 
