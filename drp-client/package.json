@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve  --host 172.31.28.156 &",
+    "start": "ng serve --proxy-config=proxy.conf.json  --host 172.31.28.156 &",
     "stop": "sudo kill $(sudo lsof -t -i:4200)",
     "build": "ng build --prod --base-href /drp/",
     "builddev": "ng build --base-href /drp/",
@@ -19,6 +19,7 @@
     "@angular/compiler": "~7.2.0",
     "@angular/core": "~7.2.0",
     "@angular/forms": "~7.2.0",
+    "@angular/http": "^7.2.16",
     "@angular/platform-browser": "~7.2.0",
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/router": "~7.2.0",
@@ -27,7 +28,8 @@
     "core-js": "^2.5.4",
     "lodash": "^4.17.15",
     "moment": "^2.25.3",
-    "rxjs": "~6.3.3",
+    "rxjs": "^6.3.3",
+    "rxjs-compat": "^6.5.5",
     "tslib": "^1.13.0",
     "zone.js": "~0.8.26"
   },

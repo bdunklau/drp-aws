@@ -1,0 +1,83 @@
+<div class="container-fluid">
+    <h1>Toll Form</h1>
+
+
+    <!--  
+<form #tollForm="ngForm" (ngSubmit)="onSubmit(tollForm)"`>  
+    -->
+<form #tollForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+
+
+    <div class="form-group">
+       <input type="text" 
+       		class="form-control" 
+		required
+		#city="ngModel"
+		[class.is-invalid]="city.invalid && city.touched"
+		name="city" 
+		id="city_field" 
+		[(ngModel)]="toll.city"
+		placeholder="City">
+       <small class="text-danger" [class.d-none]="city.valid || city.untouched">City is required</small>
+    </div>
+  
+    <div class="form-group">
+       <input type="text" 
+       		class="form-control" 
+		required
+		#location="ngModel"
+		[class.is-invalid]="location.invalid && location.touched"
+		name="location" 
+		id="location_field" 
+		[(ngModel)]="toll.location"
+		placeholder="Location">
+       <small class="text-danger" [class.d-none]="location.valid || location.untouched">Location is required</small>
+    </div>
+  
+    <div class="form-group">
+       <input type="number" 
+       		class="form-control" 
+		required
+		#price="ngModel"
+		[class.is-invalid]="price.invalid && price.touched"
+		name="price" 
+		id="price_field" 
+		[(ngModel)]="toll.price"
+		pattern="^\d+$"
+		placeholder="Price">
+       <small class="text-danger" [class.d-none]="price.valid || price.untouched">Price is required, whole numbers only</small>
+    </div>
+  
+    <div class="form-group">
+       <input type="text" 
+       		class="form-control" 
+		required
+		#timea="ngModel"
+		[class.is-invalid]="timea.invalid && timea.touched"
+		name="timea" 
+		id="timea_field" 
+		[(ngModel)]="toll.timea"
+		pattern="^\d{4}$"
+		placeholder="begin at (hhmm)">
+       <small class="text-danger" [class.d-none]="timea.valid || timea.untouched">Beginning time is required and must be 4 digits</small>
+    </div>
+  
+    <div class="form-group">
+       <input type="text" 
+       		class="form-control" 
+		required
+		#timeb="ngModel"
+		[class.is-invalid]="timeb.invalid && timeb.touched"
+		name="timeb" 
+		id="timeb_field" 
+		[(ngModel)]="toll.timeb"
+		pattern="^\d{4}$"
+		placeholder="end at (hhmm)">
+       <small class="text-danger" [class.d-none]="timeb.valid || timeb.untouched">Ending time is required and must be 4 digits</small>
+    </div>
+
+    <button [disabled]="tollForm.form.invalid" class="btn btn-primary" type="submit">Save</button>
+
+</form>
+
+</div>
