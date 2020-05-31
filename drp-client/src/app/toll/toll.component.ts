@@ -17,10 +17,14 @@ export class TollComponent implements OnInit {
     }
 
     ngOnInit() {
+        console.log('TollComponent.noOnInit():  called');
     }
 
     onSubmit() {
-        this.tollService.addToll(this.toll).subscribe(data => {console.log(data);})
+        this.tollService.addToll(this.toll).subscribe(data => {
+	    //console.log(data);
+	    this.tollService.tollAdded(data['args'])
+	})
     }
 
 }

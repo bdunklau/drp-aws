@@ -1,10 +1,6 @@
 <div class="container-fluid">
     <h1>Toll Form</h1>
 
-
-    <!--  
-<form #tollForm="ngForm" (ngSubmit)="onSubmit(tollForm)"`>  
-    -->
 <form #tollForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
 
 
@@ -35,20 +31,6 @@
     </div>
   
     <div class="form-group">
-       <input type="number" 
-       		class="form-control" 
-		required
-		#price="ngModel"
-		[class.is-invalid]="price.invalid && price.touched"
-		name="price" 
-		id="price_field" 
-		[(ngModel)]="toll.price"
-		pattern="^\d+$"
-		placeholder="Price">
-       <small class="text-danger" [class.d-none]="price.valid || price.untouched">Price is required, whole numbers only</small>
-    </div>
-  
-    <div class="form-group">
        <input type="text" 
        		class="form-control" 
 		required
@@ -74,6 +56,20 @@
 		pattern="^\d{4}$"
 		placeholder="end at (hhmm)">
        <small class="text-danger" [class.d-none]="timeb.valid || timeb.untouched">Ending time is required and must be 4 digits</small>
+    </div>
+  
+    <div class="form-group">
+       <input type="number" 
+       		class="form-control" 
+		required
+		#price="ngModel"
+		[class.is-invalid]="price.invalid && price.touched"
+		name="price" 
+		id="price_field" 
+		[(ngModel)]="toll.price"
+		pattern="^\d+$"
+		placeholder="Price">
+       <small class="text-danger" [class.d-none]="price.valid || price.untouched">Price is required, whole numbers only</small>
     </div>
 
     <button [disabled]="tollForm.form.invalid" class="btn btn-primary" type="submit">Save</button>

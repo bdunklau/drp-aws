@@ -1,0 +1,24 @@
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">City</th>
+      <th scope="col">Location</th>
+      <th scope="col">From</th>
+      <th scope="col">To</th>
+      <th scope="col">Toll</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let toll of tolls; let i = index">
+	    <th scope="row">{{i+1}}</th>
+      <td>{{toll.city}}</td>
+      <td>{{toll.location}}</td>
+      <td>{{toll.timea}}</td>
+      <td>{{toll.timeb}}</td>
+      <td>{{toll.price}}</td>
+    </tr>
+  </tbody>
+</table>
+

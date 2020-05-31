@@ -19,14 +19,6 @@ class TollService{
         })
     }
 
-	/********
-    update(tollPrice, db, callback){
-        db.collection('tollPrices').updateMany(tollPrice,
-        function(){
-            callback()      
-        })
-    }
-    ***********/
 
     // body/form parameters:  price, location, timea, timeb	
     setToll() {
