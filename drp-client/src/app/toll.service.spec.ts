@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { TollService } from './toll.service';
-import { HttpClient, HttpClientTestingModule  } from '@angular/common/http';
+import { HttpClient  } from '@angular/common/http';
+import { HttpClientTestingModule  } from '@angular/common/http/testing';
 
 fdescribe('TollService', () => {
   beforeEach(() => TestBed.configureTestingModule({
