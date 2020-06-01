@@ -6,7 +6,7 @@ import { TollComponent } from './toll.component';
 import { TollService } from '../toll.service';
 
 
-fdescribe('TollComponent', () => {
+describe('TollComponent', () => {
   let component: TollComponent;
   let fixture: ComponentFixture<TollComponent>;
 
@@ -26,7 +26,7 @@ fdescribe('TollComponent', () => {
     fixture.detectChanges();
   });
 
-  fit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
