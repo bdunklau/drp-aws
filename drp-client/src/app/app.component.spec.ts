@@ -16,8 +16,9 @@ describe('AppComponent', () => {
 
   it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);
+    expect(fixture).toBeTruthy('fixture test failed');
     const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    expect(app).toBeTruthy('app checked failed');
   });
 
   it(`should have as title 'drp-client'`, () => {
