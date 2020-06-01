@@ -9,7 +9,7 @@ fdescribe('TollService', () => {
 
 
 
-beforeEach(async(() => {
+beforeEach(async () => {
        TestBed.configureTestingModule({
          declarations: [ ],
          imports: [
@@ -21,7 +21,7 @@ beforeEach(async(() => {
          ]
        })
          .compileComponents();
-      }));
+      });
 
 
 
