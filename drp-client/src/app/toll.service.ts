@@ -17,7 +17,7 @@ export class TollService {
     //public tolls: Toll[];
     private toll_add_subject = new Subject<Toll>();
 
-    constructor(private http: HttpClient) { 
+    constructor(public http: HttpClient) { 
         //this.tolls = [];
     }
 
