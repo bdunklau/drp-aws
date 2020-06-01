@@ -49,7 +49,7 @@ export class TollService {
                 _.each(res['result'], toll => {
 		    tolls.push(new Toll(toll.city, toll.location, toll.price, toll.timea, toll.timeb))
 		})	        
-	        console.log('getTolls: ', this.tolls);
+	        console.log('getTolls: ', tolls);
 		return tolls;
 	    })
 	)
