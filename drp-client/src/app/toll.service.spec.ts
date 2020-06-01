@@ -6,6 +6,7 @@ import {
   Response, BaseRequestOptions
 } from '@angular/http';
 import { TollService } from './toll.service';
+import 'core-js/es7/reflect';
 
 
 fdescribe('TollService', () => {
