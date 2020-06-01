@@ -14,11 +14,11 @@ import * as _ from 'lodash';
 })
 export class TollService {
 
-    public tolls: Toll[];
+    //public tolls: Toll[];
     private toll_add_subject = new Subject<Toll>();
 
     constructor(private http: HttpClient) { 
-        this.tolls = [];
+        //this.tolls = [];
     }
 
 
@@ -43,14 +43,14 @@ export class TollService {
 
 	// ANGULAR HTTP
         //     https://angular.io/guide/http	
-
+        var tolls = [];
         return this.http.get(`/drpapi/get-tolls/${city}`).pipe(
 	    map(res => {
                 _.each(res['result'], toll => {
-		    this.tolls.push(new Toll(toll.city, toll.location, toll.price, toll.timea, toll.timeb))
+		    tolls.push(new Toll(toll.city, toll.location, toll.price, toll.timea, toll.timeb))
 		})	        
 	        console.log('getTolls: ', this.tolls);
-		return this.tolls;
+		return tolls;
 	    })
 	)
     }
