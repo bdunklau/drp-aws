@@ -1,5 +1,9 @@
 <div class="container-fluid">
-    <h1>Toll Form</h1>
+    <div class="row">
+        <div class="col">
+        
+
+<h1>Toll Form</h1>
 
 <form #tollForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
 
@@ -75,5 +79,16 @@
     <button [disabled]="tollForm.form.invalid" class="btn btn-primary" type="submit">Save</button>
 
 </form>
+
+
+        </div>
+
+
+
+        <div class="col">
+            <app-toll-list></app-toll-list> 
+        </div>
+    </div>
+
 
 </div>
