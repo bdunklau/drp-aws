@@ -4,7 +4,7 @@ import { HttpClient  } from '@angular/common/http';
 
 fdescribe('TollService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-      providers: [{provide: HttpClient, useValue: {}}]
+      providers: [TollService, {provide: HttpClient, useValue: {}}]
     }).compileComponents()
   );
 
