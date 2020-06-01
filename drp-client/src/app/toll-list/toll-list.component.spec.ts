@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TollListComponent } from './toll-list.component';
+import { TollService } from '../toll.service';
 
 describe('TollListComponent', () => {
   let component: TollListComponent;
@@ -8,7 +9,9 @@ describe('TollListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TollListComponent ]
+      declarations: [ TollListComponent ],
+      schemas: [ NO_ERRORS_SCHEMA ],
+      providers: [TollService]
     })
     .compileComponents();
   }));
