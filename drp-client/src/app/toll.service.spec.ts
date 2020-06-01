@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import { TollService } from './toll.service';
 import { HttpClient  } from '@angular/common/http';
 import { MockBackend } from '@angular/http/testing';
 import {
   Http, HttpModule, XHRBackend, ResponseOptions,
   Response, BaseRequestOptions
 } from '@angular/http';
+import { TollService } from './toll.service';
 
 
 fdescribe('TollService', () => {
