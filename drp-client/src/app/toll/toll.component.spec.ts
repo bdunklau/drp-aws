@@ -4,7 +4,7 @@ import { TollComponent } from './toll.component';
 import { TollService } from '../toll.service';
 
 
-describe('TollComponent', () => {
+xdescribe('TollComponent', () => {
   let component: TollComponent;
   let fixture: ComponentFixture<TollComponent>;
 
