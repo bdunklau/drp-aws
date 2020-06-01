@@ -21,13 +21,13 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy('app checked failed');
   });
 
-  it(`should have as title 'drp-client'`, () => {
+  xit(`should have as title 'drp-client'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app.title).toEqual('drp-client');
   });
 
-  it('should render title', () => {
+  xit('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
