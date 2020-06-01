@@ -14,6 +14,8 @@ fdescribe('TollService', () => {
 
 
          providers: [
+		
+                { provide: HttpClient, useValue: {} }, 
 		{
 		  provide: Http, useFactory: (backend, options) => {
 			return new Http(backend, options);
