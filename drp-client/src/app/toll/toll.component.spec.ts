@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HttpClient  } from '@angular/common/http';
 import { TollComponent } from './toll.component';
 import { TollService } from '../toll.service';
 
@@ -12,9 +13,9 @@ fdescribe('TollComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ TollComponent ],
-      imports: [ FormsModule, ReactiveFormsModule ],
+      imports: [ FormsModule, ReactiveFormsModule, HttpClientModule ],
       schemas: [ NO_ERRORS_SCHEMA ],
-      providers: [TollService]
+      providers: [TollService, HttpClient]
     })
     .compileComponents();
   }));
