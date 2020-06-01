@@ -4,7 +4,7 @@ import { HttpClientModule, HttpClient  } from '@angular/common/http';
 import { TollListComponent } from './toll-list.component';
 import { TollService } from '../toll.service';
 
-fdescribe('TollListComponent', () => {
+describe('TollListComponent', () => {
   let component: TollListComponent;
   let fixture: ComponentFixture<TollListComponent>;
 
@@ -24,7 +24,7 @@ fdescribe('TollListComponent', () => {
     fixture.detectChanges();
   });
 
-  fit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
