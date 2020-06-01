@@ -3,13 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientModule, HttpClient  } from '@angular/common/http';
 import { TollService } from './toll.service';
 
-fdescribe('TollService', () => {
+describe('TollService', () => {
 
-
-
-
-
-beforeEach(async () => {
+    beforeEach(async () => {
        TestBed.configureTestingModule({
          declarations: [ ],
          imports: [
@@ -21,19 +17,11 @@ beforeEach(async () => {
          ]
        })
          .compileComponents();
-      });
+    });
 
 
-
-
-
-
-
-
-
-
-  fit('should be created', () => {
-    const service: TollService = TestBed.get(TollService);
-    expect(service).toBeTruthy();
-  });
+    it('should be created', () => {
+      const service: TollService = TestBed.get(TollService);
+      expect(service).toBeTruthy();
+    });
 });

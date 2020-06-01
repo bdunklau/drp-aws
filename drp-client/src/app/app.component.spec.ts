@@ -21,12 +21,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy('app checked failed');
   });
 
+
+  // no point yet in making this test pass
   xit(`should have as title 'drp-client'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app.title).toEqual('drp-client');
   });
 
+
+  // no point yet in making this test pass
   xit('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
