@@ -1,31 +1,27 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { HttpClient  } from '@angular/common/http';
-import { MockBackend } from '@angular/http/testing';
-import {
-  Http, HttpModule, XHRBackend, ResponseOptions,
-  Response, BaseRequestOptions
-} from '@angular/http';
+import { HttpClientModule, HttpClient  } from '@angular/common/http';
 import { TollService } from './toll.service';
-import 'core-js/es7/reflect';
-
 
 fdescribe('TollService', () => {
-  beforeEach(() => TestBed.configureTestingModule({
 
 
+
+
+
+beforeEach(async(() => {
+       TestBed.configureTestingModule({
+         declarations: [ ],
+         imports: [
+           HttpClientModule
+         ],
+         schemas: [NO_ERRORS_SCHEMA],
          providers: [
-		
-                { provide: HttpClient, useValue: {} }, 
-		{
-		  provide: Http, useFactory: (backend, options) => {
-			return new Http(backend, options);
-		  },
-		  deps: [MockBackend, BaseRequestOptions]
-		},
-		MockBackend,
-		BaseRequestOptions,
-		TollService
-	  ]
+           HttpClient,
+         ]
+       })
+         .compileComponents();
+      }));
 
 
 
@@ -33,8 +29,8 @@ fdescribe('TollService', () => {
 
 
 
-    }).compileComponents()
-  );
+
+
 
   fit('should be created', () => {
     const service: TollService = TestBed.get(TollService);
