@@ -1,17 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpClientModule, HttpClient  } from '@angular/common/http';
 import { TollListComponent } from './toll-list.component';
 import { TollService } from '../toll.service';
 
-describe('TollListComponent', () => {
+fdescribe('TollListComponent', () => {
   let component: TollListComponent;
   let fixture: ComponentFixture<TollListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ TollListComponent ],
+      imports: [ HttpClientModule ],
       schemas: [ NO_ERRORS_SCHEMA ],
-      providers: [TollService]
+      providers: [TollService, HttpClient]
     })
     .compileComponents();
   }));
@@ -22,7 +24,7 @@ describe('TollListComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  fit('should create', () => {
     expect(component).toBeTruthy();
   });
 });
