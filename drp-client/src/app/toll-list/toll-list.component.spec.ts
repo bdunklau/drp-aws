@@ -3,7 +3,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientModule, HttpClient  } from '@angular/common/http';
 import { TollListComponent } from './toll-list.component';
 import { TollService } from '../toll.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 
 describe('TollListComponent', () => {
