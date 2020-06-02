@@ -21,6 +21,9 @@ export class TollComponent implements OnInit {
     ngOnInit() {
         console.log('TollComponent.noOnInit():  called');
 	let self = this;
+	
+	// See  TollListComponent.onSelect() - that functions passes these parameters
+	// as OPTIONAL parameters.   They aren't guaranteed to exist
 	this.route.paramMap.subscribe((params: ParamMap) => {
 	    let allPresent: boolean = params.get('city') && params.get('location') && params.get('price')
 	        && params.get('timea') && params.get('timeb') ? true : false;
