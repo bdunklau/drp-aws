@@ -14,12 +14,10 @@ import * as _ from 'lodash';
 })
 export class TollService {
 
-    //public tolls: Toll[];
     private toll_add_subject = new Subject<Toll>();
-    //private toll_selected = new Subject<Toll>();
+    private city_selected = new Subject<string>();
 
     constructor(public http: HttpClient) { 
-        //this.tolls = [];
     }
 
 
@@ -40,15 +38,6 @@ export class TollService {
         return this.toll_add_subject; 
     }
 
-    /******
-    tollSelectEvents() {
-        return this.toll_selected;
-    }
-
-    tollSelected(toll) {
-        this.toll_selected.next(toll);
-    } 
-     *****/
 
     getTolls(city: string): Observable<Toll[]> {
 
@@ -64,5 +53,16 @@ export class TollService {
 		return tolls;
 	    })
 	)
+    }
+
+
+    // TollComponent calls this and TollListComponent subscribes to city_selected
+    // so that it knows what city to query on
+    citySelected(city: string) {
+        this.city_selected.next(city);
+    }
+
+    listenForCity() {
+        return this.city_selected;
     }
 }

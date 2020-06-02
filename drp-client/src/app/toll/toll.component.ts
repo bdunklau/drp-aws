@@ -21,6 +21,9 @@ export class TollComponent implements OnInit {
     ngOnInit() {
         console.log('TollComponent.noOnInit():  called');
 	let self = this;
+	
+	// See  TollListComponent.onSelect() - that functions passes these parameters
+	// as OPTIONAL parameters.   They aren't guaranteed to exist
 	this.route.paramMap.subscribe((params: ParamMap) => {
 	    let allPresent: boolean = params.get('city') && params.get('location') && params.get('price')
 	        && params.get('timea') && params.get('timeb') ? true : false;
@@ -38,6 +41,7 @@ export class TollComponent implements OnInit {
 	console.log('onSubmit: form = ', form);
         this.tollService.addToll(this.toll).subscribe(data => {
 	    //console.log(data);
+	    this.tollService.citySelected(this.toll.city);
 	    this.tollService.tollAdded(data['args'])
 	    this.newToll(form);
 	})
@@ -47,6 +51,10 @@ export class TollComponent implements OnInit {
 	form.reset();
         this.updating = false;
         this.toll = new Toll('', '', 0, 0, 0) 
+    }
+
+    searchTolls(form) {
+        this.tollService.citySelected(this.toll.city);
     }
 
 }

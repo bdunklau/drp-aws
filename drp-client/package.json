@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config=proxy.conf.json  --host 172.31.28.156 --port 4201 &",
-    "stop": "sudo kill $(sudo lsof -t -i:4201)",
+    "start": "ng serve --proxy-config=proxy.conf.json  --host 172.31.28.156 &",
+    "stop": "sudo kill $(sudo lsof -t -i:4200)",
     "build": "ng build --prod --base-href /drp/",
     "builddev": "ng build --base-href /drp/",
     "test": "ng test",

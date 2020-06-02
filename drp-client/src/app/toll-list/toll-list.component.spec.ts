@@ -3,7 +3,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientModule, HttpClient  } from '@angular/common/http';
 import { TollListComponent } from './toll-list.component';
 import { TollService } from '../toll.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 
 
 describe('TollListComponent', () => {
@@ -21,8 +21,22 @@ describe('TollListComponent', () => {
                     provide: Router, 
                     useClass: class { navigate = jasmine.createSpy("navigate"); }
                   },
-	          {provide: ActivatedRoute, useValue: {snapshot:{paramMap:{get: function(str) {return '123'} }} }   }
+
+            {
+              provide: ActivatedRoute,
+              useValue: {
+                snapshot: {
+                  paramMap:{get: function(str) {return '123'} }
+                },
+                paramMap: {
+                  subscribe: function(params:ParamMap) {
+                  }
+                }
+              }
+             }
+
       ]
+
     })
     .compileComponents();
   }));

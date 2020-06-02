@@ -3,6 +3,7 @@ import { TollService } from '../toll.service';
 import { Toll } from '../toll/toll.model';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'app-toll-list',
@@ -11,16 +12,39 @@ import { Router } from '@angular/router';
 })
 export class TollListComponent implements OnInit {
 
-  city: string = 'CityA';
+  city: string;
   public tolls = [];
 
   constructor(private tollService:TollService,
-	     private router: Router) { }
+	     private router: Router,
+	     private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.tollService.getTolls(this.city)
-    	.subscribe(data => this.tolls = data);
+    let self = this;
+    this.route.paramMap.subscribe((params: ParamMap) => {
+	if(!params.get('city'))
+            return;
+        self.city = params.get('city');
+	self.query(self.city);
+    }) 
 
+    this.listenForTollsToBeAdded();
+    this.listenForCity();
+  }
+
+
+  onSelect(toll) {
+    // NOTE:  the { and } means the url parameters are optional
+    this.router.navigate(['/toll', 
+	{city: toll.city, 
+	 location: toll.location, 
+	 timea: toll.timea, 
+	 timeb: toll.timeb,
+	 price: toll.price} ]);
+  }
+
+
+  listenForTollsToBeAdded() {
     let self = this;
     var observer = {
         next: function(value) {
@@ -38,14 +62,23 @@ export class TollListComponent implements OnInit {
   }
 
 
-  onSelect(toll) {
-    // NOTE:  the { and } means the url parameters are optional
-    this.router.navigate(['/toll', 
-	{city: toll.city, 
-	 location: toll.location, 
-	 timea: toll.timea, 
-	 timeb: toll.timeb,
-	 price: toll.price} ]);
+  listenForCity() {
+      let self = this;
+      this.tollService.listenForCity().subscribe({
+          next: function(value) {
+	      self.query(value);
+	  },
+          error: function(value) {
+          },
+          complete: function() {}
+      });
   }
+
+
+  query(city: string) {
+      this.tollService.getTolls(city)
+    	  .subscribe(data => this.tolls = data);
+  }
+
 
 }
