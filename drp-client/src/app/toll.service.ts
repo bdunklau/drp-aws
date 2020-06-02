@@ -16,7 +16,7 @@ export class TollService {
 
     //public tolls: Toll[];
     private toll_add_subject = new Subject<Toll>();
-    private toll_selected = new Subject<Toll>();
+    //private toll_selected = new Subject<Toll>();
 
     constructor(public http: HttpClient) { 
         //this.tolls = [];
@@ -40,6 +40,7 @@ export class TollService {
         return this.toll_add_subject; 
     }
 
+    /******
     tollSelectEvents() {
         return this.toll_selected;
     }
@@ -47,6 +48,7 @@ export class TollService {
     tollSelected(toll) {
         this.toll_selected.next(toll);
     } 
+     *****/
 
     getTolls(city: string): Observable<Toll[]> {
 
