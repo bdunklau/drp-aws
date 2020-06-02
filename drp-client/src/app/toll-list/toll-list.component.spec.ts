@@ -10,12 +10,18 @@ describe('TollListComponent', () => {
   let component: TollListComponent;
   let fixture: ComponentFixture<TollListComponent>;
 
+  const fakeActivatedRoute = {
+    snapshot: { data: { ... } }
+  } as ActivatedRoute;
+
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ TollListComponent ],
       imports: [ HttpClientModule ],
       schemas: [ NO_ERRORS_SCHEMA ],
-      providers: [TollService, HttpClient, Router]
+      providers: [TollService, HttpClient, 
+	          {provide: ActivatedRoute, useValue: fakeActivatedRoute}]
     })
     .compileComponents();
   }));
