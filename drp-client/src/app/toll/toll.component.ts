@@ -27,9 +27,9 @@ export class TollComponent implements OnInit {
 	    self.updating = allPresent;
             let city = params.get('city') ? params.get('city') : '';
 	    let location = params.get('location') ? params.get('location') : '';
-	    let timea = params.get('timea') ? params.get('timea') : 0;
-	    let timeb = params.get('timeb') ? params.get('timeb') : 0;
-            let price = params.get('price') ? params.get('price') : 0;
+	    let timea = params.get('timea') ? parseInt(params.get('timea')) : 0;
+	    let timeb = params.get('timeb') ? parseInt(params.get('timeb')) : 0;
+            let price = params.get('price') ? parseInt(params.get('price')) : 0;
 	    self.toll = new Toll(city, location, price, timea, timeb);
 	});
     }
