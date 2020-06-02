@@ -41,6 +41,7 @@ export class TollComponent implements OnInit {
 	console.log('onSubmit: form = ', form);
         this.tollService.addToll(this.toll).subscribe(data => {
 	    //console.log(data);
+	    this.tollService.citySelected(this.toll.city);
 	    this.tollService.tollAdded(data['args'])
 	    this.newToll(form);
 	})
@@ -50,6 +51,10 @@ export class TollComponent implements OnInit {
 	form.reset();
         this.updating = false;
         this.toll = new Toll('', '', 0, 0, 0) 
+    }
+
+    searchTolls(form) {
+        this.tollService.citySelected(this.toll.city);
     }
 
 }

@@ -25,12 +25,11 @@ export class TollListComponent implements OnInit {
 	if(!params.get('city'))
             return;
         self.city = params.get('city');
-        this.tollService.getTolls(self.city)
-    	  .subscribe(data => this.tolls = data);
-    
+	self.query(self.city);
     }) 
 
     this.listenForTollsToBeAdded();
+    this.listenForCity();
   }
 
 
@@ -61,5 +60,25 @@ export class TollListComponent implements OnInit {
     //see   2:35 of https://www.youtube.com/watch?v=rdK92pf3abs
     this.tollService.tollAddEvents().subscribe(observer);
   }
+
+
+  listenForCity() {
+      let self = this;
+      this.tollService.listenForCity().subscribe({
+          next: function(value) {
+	      self.query(value);
+	  },
+          error: function(value) {
+          },
+          complete: function() {}
+      });
+  }
+
+
+  query(city: string) {
+      this.tollService.getTolls(city)
+    	  .subscribe(data => this.tolls = data);
+  }
+
 
 }
