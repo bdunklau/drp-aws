@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TollService } from '../toll.service';
 import { Toll } from './toll.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'app-toll',
