@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient  } from '@angular/common/http';
 import { TollComponent } from './toll.component';
 import { TollService } from '../toll.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 describe('TollComponent', () => {
@@ -15,7 +16,7 @@ describe('TollComponent', () => {
       declarations: [ TollComponent ],
       imports: [ FormsModule, HttpClientModule ],
       schemas: [ NO_ERRORS_SCHEMA ],
-      providers: [TollService, HttpClient]
+      providers: [TollService, HttpClient, ActivatedRoute]
     })
     .compileComponents();
   }));
