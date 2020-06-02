@@ -10,10 +10,6 @@ describe('TollListComponent', () => {
   let component: TollListComponent;
   let fixture: ComponentFixture<TollListComponent>;
 
-  const fakeActivatedRoute = {
-    snapshot: { data: { ... } }
-  } as ActivatedRoute;
-
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -21,7 +17,8 @@ describe('TollListComponent', () => {
       imports: [ HttpClientModule ],
       schemas: [ NO_ERRORS_SCHEMA ],
       providers: [TollService, HttpClient, 
-	          {provide: ActivatedRoute, useValue: fakeActivatedRoute}]
+	          {provide: ActivatedRoute, useValue: {snapshot:{paramMap:{get: function(str) {return '123'} }} }   }
+      ]
     })
     .compileComponents();
   }));
