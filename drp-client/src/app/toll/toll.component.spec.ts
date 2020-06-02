@@ -16,7 +16,9 @@ describe('TollComponent', () => {
       declarations: [ TollComponent ],
       imports: [ FormsModule, HttpClientModule ],
       schemas: [ NO_ERRORS_SCHEMA ],
-      providers: [TollService, HttpClient, ActivatedRoute]
+      providers: [TollService, HttpClient, 
+	     {provide: ActivatedRoute, useValue: {snapshot:{paramMap:{get: function(str) {return '123'} }} }   }
+      ]
     })
     .compileComponents();
   }));

@@ -3,7 +3,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientModule, HttpClient  } from '@angular/common/http';
 import { TollListComponent } from './toll-list.component';
 import { TollService } from '../toll.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 describe('TollListComponent', () => {
@@ -16,7 +16,7 @@ describe('TollListComponent', () => {
       declarations: [ TollListComponent ],
       imports: [ HttpClientModule ],
       schemas: [ NO_ERRORS_SCHEMA ],
-      providers: [TollService, HttpClient, 
+      providers: [TollService, HttpClient, Router, 
 	          {provide: ActivatedRoute, useValue: {snapshot:{paramMap:{get: function(str) {return '123'} }} }   }
       ]
     })
