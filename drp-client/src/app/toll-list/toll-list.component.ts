@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TollService } from '../toll.service';
 import { Toll } from '../toll/toll.model';
 import * as _ from 'lodash';
-//import { Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-toll-list',
@@ -15,7 +15,7 @@ export class TollListComponent implements OnInit {
   public tolls = [];
 
   constructor(private tollService:TollService,
-	     /*private router: Router*/) { }
+	     private router: Router) { }
 
   ngOnInit() {
     this.tollService.getTolls(this.city)
@@ -39,8 +39,13 @@ export class TollListComponent implements OnInit {
 
 
   onSelect(toll) {
-    // this.router.navigate(['/toll', toll.city, toll.location, toll.timea, toll.timeb]);
-    this.tollService.tollSelected(toll);
+    // NOTE:  the { and } means the url parameters are optional
+    this.router.navigate(['/toll', 
+	{city: toll.city, 
+	 location: toll.location, 
+	 timea: toll.timea, 
+	 timeb: toll.timeb,
+	 price: toll.price} ]);
   }
 
 }

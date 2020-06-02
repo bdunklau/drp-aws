@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TollService } from '../toll.service';
 import { Toll } from './toll.model';
-//import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-toll',
@@ -15,31 +15,23 @@ export class TollComponent implements OnInit {
     updating:boolean = false;
 
     constructor(private tollService: TollService,
-	      /*private route: ActivatedRoute*/) {
+	      private route: ActivatedRoute) {
     }
 
     ngOnInit() {
         console.log('TollComponent.noOnInit():  called');
 	let self = this;
-	this.tollService.tollSelectEvents().subscribe({
-	    next: function(value) {
-		self.updating = true;
-	        self.toll = new Toll(value.city, value.location, value.price, value.timea, value.timeb)
-	    },
-	    error: function(value) {},
-	    complete: function() {}
+	this.route.paramMap.subscribe((params: ParamMap) => {
+	    var allPresent = params.get('city') && params.get('location') && params.get('price')
+	        && params.get('timea') && params.get('timeb');
+	    self.updating = allPresent;
+            let city = params.get('city') ? params.get('city') : '';
+	    let location = params.get('location') ? params.get('location') : '';
+	    let timea = params.get('timea') ? params.get('timea') : 0;
+	    let timeb = params.get('timeb') ? params.get('timeb') : 0;
+            let price = params.get('price') ? params.get('price') : 0;
+	    self.toll = new Toll(city, location, price, timea, timeb);
 	});
-	/**********
-	let city = this.route.snapshot.paramMap.get('city');
-	let location = this.route.snapshot.paramMap.get('location');
-	let timea = parseInt(this.route.snapshot.paramMap.get('timea'));
-	let timeb = parseInt(this.route.snapshot.paramMap.get('timeb'));
-	if(city) this.toll.city = city;
-	if(location) this.toll.location = location;
-	if(timea) this.toll.timea = timea;
-	if(timeb) this.toll.timeb = timeb;
-	console.log('city:', city, ' location:',location, ' timea:', timea, ' timeb:', timeb);
-          *********/
     }
 
     onSubmit(form) {
