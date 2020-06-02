@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient  } from '@angular/common/http';
 import { TollComponent } from './toll.component';
 import { TollService } from '../toll.service';
-import { ActivatedRoute } from '@angular/router';
-
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Observable,of, from } from 'rxjs';
 
 describe('TollComponent', () => {
   let component: TollComponent;
@@ -17,7 +17,18 @@ describe('TollComponent', () => {
       imports: [ FormsModule, HttpClientModule ],
       schemas: [ NO_ERRORS_SCHEMA ],
       providers: [TollService, HttpClient, 
-	     {provide: ActivatedRoute, useValue: {snapshot:{paramMap:{get: function(str) {return '123'} }} }   }
+	     {
+	      provide: ActivatedRoute, 
+	      useValue: {
+	        snapshot: {
+		  paramMap:{get: function(str) {return '123'} }
+		},
+	        paramMap: {
+		  subscribe: function(params:ParamMap) {
+		  }
+		}
+	      }   
+	     }
       ]
     })
     .compileComponents();
