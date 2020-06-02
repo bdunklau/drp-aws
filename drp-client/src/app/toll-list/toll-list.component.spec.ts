@@ -16,7 +16,11 @@ describe('TollListComponent', () => {
       declarations: [ TollListComponent ],
       imports: [ HttpClientModule ],
       schemas: [ NO_ERRORS_SCHEMA ],
-      providers: [TollService, HttpClient, Router, 
+      providers: [TollService, HttpClient, 
+                  { 
+                    provide: Router, 
+                    useClass: class { navigate = jasmine.createSpy("navigate"); }
+                  },
 	          {provide: ActivatedRoute, useValue: {snapshot:{paramMap:{get: function(str) {return '123'} }} }   }
       ]
     })
