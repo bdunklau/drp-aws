@@ -23,7 +23,7 @@ export class TollComponent implements OnInit {
 	let self = this;
 	this.route.paramMap.subscribe((params: ParamMap) => {
 	    let allPresent: boolean = params.get('city') && params.get('location') && params.get('price')
-	        && params.get('timea') && params.get('timeb');
+	        && params.get('timea') && params.get('timeb') ? true : false;
 	    self.updating = allPresent;
             let city = params.get('city') ? params.get('city') : '';
 	    let location = params.get('location') ? params.get('location') : '';
