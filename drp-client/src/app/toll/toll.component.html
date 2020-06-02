@@ -5,12 +5,13 @@
 
 <h1>Toll Form</h1>
 
-<form #tollForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+<form #tollForm="ngForm" (ngSubmit)="onSubmit(tollForm)" novalidate>
 
 
     <div class="form-group">
        <input type="text" 
-       		class="form-control" 
+       		class="form-control"
+		[disabled]="updating"
 		required
 		#city="ngModel"
 		[class.is-invalid]="city.invalid && city.touched"
@@ -24,6 +25,7 @@
     <div class="form-group">
        <input type="text" 
        		class="form-control" 
+		[disabled]="updating"
 		required
 		#location="ngModel"
 		[class.is-invalid]="location.invalid && location.touched"
@@ -37,29 +39,31 @@
     <div class="form-group">
        <input type="text" 
        		class="form-control" 
+		[disabled]="updating"
 		required
 		#timea="ngModel"
 		[class.is-invalid]="timea.invalid && timea.touched"
 		name="timea" 
 		id="timea_field" 
 		[(ngModel)]="toll.timea"
-		pattern="^\d{4}$"
+		pattern="^\d{3,4}$"
 		placeholder="begin at (hhmm)">
-       <small class="text-danger" [class.d-none]="timea.valid || timea.untouched">Beginning time is required and must be 4 digits</small>
+       <small class="text-danger" [class.d-none]="timea.valid || timea.untouched">Beginning time is required and must be 3 or 4 digits</small>
     </div>
   
     <div class="form-group">
        <input type="text" 
        		class="form-control" 
+		[disabled]="updating"
 		required
 		#timeb="ngModel"
 		[class.is-invalid]="timeb.invalid && timeb.touched"
 		name="timeb" 
 		id="timeb_field" 
 		[(ngModel)]="toll.timeb"
-		pattern="^\d{4}$"
+		pattern="^\d{3,4}$"
 		placeholder="end at (hhmm)">
-       <small class="text-danger" [class.d-none]="timeb.valid || timeb.untouched">Ending time is required and must be 4 digits</small>
+       <small class="text-danger" [class.d-none]="timeb.valid || timeb.untouched">Ending time is required and must be either 3 or 4 digits</small>
     </div>
   
     <div class="form-group">
@@ -77,6 +81,8 @@
     </div>
 
     <button [disabled]="tollForm.form.invalid" class="btn btn-primary" type="submit">Save</button>
+    &nbsp;
+    <button (click)="newToll(tollForm)" class="btn btn-primary marg10" type="button">New</button>
 
 </form>
 

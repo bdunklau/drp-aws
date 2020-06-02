@@ -8,13 +8,15 @@ import { AppComponent } from './app.component';
 import { TollComponent } from './toll/toll.component';
 import { ChargeComponent } from './charge/charge.component';
 import { TollListComponent } from './toll-list/toll-list.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TollComponent,
     ChargeComponent,
-    TollListComponent
+    TollListComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,

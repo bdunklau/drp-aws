@@ -2,6 +2,7 @@
 <table class="table table-striped">
   <thead>
     <tr>
+      <th scope="col"></th>
       <th scope="col">#</th>
       <th scope="col">City</th>
       <th scope="col">Location</th>
@@ -12,7 +13,8 @@
   </thead>
   <tbody>
     <tr *ngFor="let toll of tolls; let i = index">
-	    <th scope="row">{{i+1}}</th>
+      <td><a (click)="onSelect(toll)">edit</a></td>
+      <th scope="row">{{i+1}}</th>
       <td>{{toll.city}}</td>
       <td>{{toll.location}}</td>
       <td>{{toll.timea}}</td>
