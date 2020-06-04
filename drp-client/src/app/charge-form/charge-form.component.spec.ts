@@ -1,35 +1,31 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ChargeComponent } from './charge.component';
 import { HttpClientModule, HttpClient  } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { ChargeFormComponent } from '../charge-form/charge-form.component';
-import { ChargeListComponent } from '../charge-list/charge-list.component';
+import { ChargeFormComponent } from './charge-form.component';
 
-
-describe('ChargeComponent', () => {
-  let component: ChargeComponent;
-  let fixture: ComponentFixture<ChargeComponent>;
+describe('ChargeFormComponent', () => {
+  let component: ChargeFormComponent;
+  let fixture: ComponentFixture<ChargeFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ChargeComponent, ChargeFormComponent, ChargeListComponent ],
+      declarations: [ ChargeFormComponent ],
       imports: [ HttpClientModule ],
       schemas: [ NO_ERRORS_SCHEMA ],
-       providers: [
+      providers: [
           HttpClient,
-          {
+	  {
               provide: Router,
               useClass: class { navigate = jasmine.createSpy("navigate"); }
           },
       ]
-
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ChargeComponent);
+    fixture = TestBed.createComponent(ChargeFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

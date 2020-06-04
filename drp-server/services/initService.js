@@ -1,4 +1,4 @@
-const moment = require('moment');
+const moment = require('moment-timezone');
 const assert = require('assert');
 const MongoClient = require('mongodb').MongoClient;
 const url = "mongodb://172.31.28.156:27017";
@@ -42,7 +42,14 @@ class InitService{
     getTime() {
         let millis = parseInt(this.req.params.timestamp);
         let thetime = moment(millis).format('MM-DD-YYYY Hmm:ss.SSS');
-	return this.res.status(200).json({status: 'get time', input: millis, time: thetime});
+	let central = moment(millis).tz('America/Chicago').format('MM-DD-YYYY Hmm:ss.SSS')
+	let eastern = moment(millis).tz('America/New_York').format('MM-DD-YYYY Hmm:ss.SSS')
+	return this.res.status(200).json({status: 'get time', 
+		note: `HERE IS ${millis} AS CENTRAL, EASTERN AND UTC TIME`,
+		input: millis, 
+		central_time: central,
+		eastern_time: eastern,
+		utc_time: thetime});
     }
 
 }

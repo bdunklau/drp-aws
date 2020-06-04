@@ -1,0 +1,56 @@
+<div class="container-fluid">
+
+<h4>Select City</h4>
+<div class="row" style="margin-bottom:60px;">
+    <div class="col">
+      <button (click)="setCity('NYC')" class="btn btn-primary" type="button">NYC</button>
+      &nbsp;
+      <button (click)="setCity('London')" class="btn btn-primary" type="button">London</button>
+    </div>
+</div>
+<hr/>
+<h4>Select Plate</h4>
+<div class="row" style="margin-bottom:60px;">
+    <div class="col">
+      <button (click)="setPlate('LIC PLT 1')" class="btn btn-primary" type="button">LIC PLT 1</button>
+      &nbsp;
+      <button (click)="setPlate('LIC PLT 2')" class="btn btn-primary" type="button">LIC PLT 2</button>
+      &nbsp;
+      <button (click)="setPlate('LIC PLT 3')" class="btn btn-primary" type="button">LIC PLT 3</button>
+    </div>
+</div>
+<hr/>
+
+<h4>Select Time</h4>
+
+    <table class="table">
+        <tr><th>Eastern -04:00</th><th>London +01:00</th><th>GMT</th></tr>
+	<tr><td>{{eastern}}</td><td>{{londonTime}}</td><td>{{gmt}}</td></tr>
+	<tr>
+          <td nowrap colspan="3">
+            <b>Unix time: </b> {{currTime}}
+	  </td>
+	</tr>
+	<tr>
+          <td nowrap colspan="3">
+    <button (click)="setTime('day', -1)" class="btn btn-secondary" type="button">&lt; day</button>
+    &nbsp;
+    <button (click)="setTime('hour', -1)" class="btn btn-secondary" type="button">&lt; hr</button>
+    &nbsp;
+    <button (click)="setTime('minute', -1)" class="btn btn-secondary" type="button">&lt; min</button>
+    &nbsp;
+    <button (click)="setNow()" class="btn btn-secondary" type="button">Now</button>
+    &nbsp;
+    <button (click)="setTime('minute', 1)" class="btn btn-secondary" type="button">min &gt;</button>
+    &nbsp;
+    <button (click)="setTime('hour', 1)" class="btn btn-secondary" type="button">hr &gt;</button>
+    &nbsp;
+    <button (click)="setTime('day', 1)" class="btn btn-secondary" type="button">day &gt;</button>
+	  </td>
+	</tr>
+
+    </table>
+
+
+</div>
+

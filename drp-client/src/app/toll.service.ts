@@ -30,6 +30,10 @@ export class TollService {
         return this.http.post('/drpapi/set-toll', item);
     }
 
+    deleteToll(item: Toll) {
+        return this.http.post('/drpapi/delete-tolls', item);
+    }
+
     tollAdded(toll: {city: string, location: string, timea: number, timeb: number, price: number}) {
         this.toll_add_subject.next(toll);
     }

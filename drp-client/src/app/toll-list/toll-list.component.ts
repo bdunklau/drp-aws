@@ -33,6 +33,14 @@ export class TollListComponent implements OnInit {
   }
 
 
+  delete(toll) {
+    this.tollService.deleteToll(toll).subscribe(data => {
+        // now delete the toll from the html list
+	_.remove(this.tolls, toll);
+    })
+  }
+
+
   onSelect(toll) {
     // NOTE:  the { and } means the url parameters are optional
     this.router.navigate(['/toll', 

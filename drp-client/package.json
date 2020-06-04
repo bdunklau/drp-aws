@@ -28,6 +28,7 @@
     "core-js": "^2.5.4",
     "lodash": "^4.17.15",
     "moment": "^2.25.3",
+    "moment-timezone": "^0.5.31",
     "rxjs": "^6.3.3",
     "rxjs-compat": "^6.5.5",
     "tslib": "^1.13.0",
