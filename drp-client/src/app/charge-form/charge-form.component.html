@@ -1,0 +1,166 @@
+<div class="container-fluid">
+
+<h4>Select City</h4>
+<div class="row" style="margin-bottom:60px;">
+    <div class="col">
+      <button (click)="setCity('NYC')" class="btn btn-primary" type="button">NYC</button>
+      &nbsp;
+      <button (click)="setCity('London')" class="btn btn-primary" type="button">London</button>
+    </div>
+</div>
+<hr/>
+<h4>Select Plate</h4>
+<div class="row" style="margin-bottom:60px;">
+    <div class="col">
+      <button (click)="setPlate('LIC PLT 1')" class="btn btn-primary" type="button">LIC PLT 1</button>
+      &nbsp;
+      <button (click)="setPlate('LIC PLT 2')" class="btn btn-primary" type="button">LIC PLT 2</button>
+      &nbsp;
+      <button (click)="setPlate('LIC PLT 3')" class="btn btn-primary" type="button">LIC PLT 3</button>
+    </div>
+</div>
+<hr/>
+
+<h4>Select Time</h4>
+<form #chargeForm="ngForm" (ngSubmit)="onSubmit(chargeForm)" novalidate>
+   
+    <!--  plate, city, location, time(year, month, day, hour, minute, second) 
+    -->
+
+    <table class="table">
+        <tr><th>Eastern -04:00</th><th>London +01:00</th><th>GMT</th></tr>
+	<tr><td>{{eastern}}</td><td>{{londonTime}}</td><td>{{gmt}}</td></tr>
+	<tr>
+          <td nowrap colspan="3">
+            <b>Unix time: </b> {{currTime}}
+	  </td>
+	</tr>
+	<tr>
+          <td nowrap colspan="3">
+    <button (click)="setTime('day', -1)" class="btn btn-secondary" type="button">&lt; day</button>
+    &nbsp;
+    <button (click)="setTime('hour', -1)" class="btn btn-secondary" type="button">&lt; hr</button>
+    &nbsp;
+    <button (click)="setTime('minute', -1)" class="btn btn-secondary" type="button">&lt; min</button>
+    &nbsp;
+    <button (click)="setNow()" class="btn btn-secondary" type="button">Now</button>
+    &nbsp;
+    <button (click)="setTime('minute', 1)" class="btn btn-secondary" type="button">min &gt;</button>
+    &nbsp;
+    <button (click)="setTime('hour', 1)" class="btn btn-secondary" type="button">hr &gt;</button>
+    &nbsp;
+    <button (click)="setTime('day', 1)" class="btn btn-secondary" type="button">day &gt;</button>
+	  </td>
+	</tr>
+
+    </table>
+
+
+    <!--
+
+    <div class="form-group">
+       <input type="text" 
+                class="form-control"
+                required
+                #plate="ngModel"
+                [class.is-invalid]="plate.invalid && plate.touched"
+                name="plate" 
+                id="plate_field" 
+                [(ngModel)]="charge.plate"
+                placeholder="License plate">
+       <small class="text-danger" [class.d-none]="plate.valid || plate.untouched">License plate is required</small>
+    </div>
+
+
+    <div class="form-group">
+       <input type="text" 
+                class="form-control"
+                required
+                #location="ngModel"
+                [class.is-invalid]="location.invalid && location.touched"
+                name="location" 
+                id="location_field" 
+                [(ngModel)]="charge.location"
+                placeholder="Location">
+       <small class="text-danger" [class.d-none]="location.valid || location.untouched">Location is required</small>
+    </div>
+
+
+    <div class="form-group">
+       <input type="number" 
+                class="form-control"
+                required
+                #year="ngModel"
+                [class.is-invalid]="year.invalid && year.touched"
+                name="year" 
+                id="year_field" 
+                [(ngModel)]="yearValue"
+                placeholder="Year">
+       <small class="text-danger" [class.d-none]="year.valid || year.untouched">Year is required</small>
+
+       <input type="number" 
+                class="form-control"
+                required
+                #month="ngModel"
+                [class.is-invalid]="month.invalid && month.touched"
+                name="month" 
+                id="month_field" 
+                [(ngModel)]="monthValue"
+                placeholder="Month">
+       <small class="text-danger" [class.d-none]="month.valid || month.untouched">Month is required</small>
+
+       <input type="number" 
+                class="form-control"
+                required
+                #day="ngModel"
+                [class.is-invalid]="day.invalid && day.touched"
+                name="day" 
+                id="day_field" 
+                [(ngModel)]="dayValue"
+                placeholder="Day">
+       <small class="text-danger" [class.d-none]="day.valid || day.untouched">Day is required</small>
+
+       <input type="number" 
+                class="form-control"
+                required
+                #hour="ngModel"
+                [class.is-invalid]="hour.invalid && hour.touched"
+                name="hour" 
+                id="hour_field" 
+                [(ngModel)]="hourValue"
+                placeholder="Hour">
+       <small class="text-danger" [class.d-none]="hour.valid || hour.untouched">Hour is required</small>
+
+       <input type="number" 
+                class="form-control"
+                required
+                #minute="ngModel"
+                [class.is-invalid]="minute.invalid && minute.touched"
+                name="minute" 
+                id="minute_field" 
+                [(ngModel)]="minuteValue"
+                placeholder="Minute">
+       <small class="text-danger" [class.d-none]="minute.valid || minute.untouched">Minute is required</small>
+
+       <input type="number" 
+                class="form-control"
+                required
+                #second="ngModel"
+                [class.is-invalid]="second.invalid && second.touched"
+                name="second" 
+                id="second_field" 
+                [(ngModel)]="secondValue"
+                placeholder="Second">
+       <small class="text-danger" [class.d-none]="second.valid || second.untouched">Second is required</small>
+
+    </div>
+
+
+    <button [disabled]="chargeForm.form.invalid" class="btn btn-primary" type="submit">Save</button>
+        -->
+
+
+</form>
+
+</div>
+

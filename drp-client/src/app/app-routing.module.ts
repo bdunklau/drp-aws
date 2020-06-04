@@ -7,7 +7,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 
 const routes: Routes = [
     { path: '', redirectTo: '/toll', pathMatch: 'full' },
-    //{ path: 'toll/:city/:location/:timea/:timeb', component: TollComponent },
+    { path: 'charge', component: ChargeComponent },
     { path: 'toll', component: TollComponent },
     { path: '**', component: PageNotFoundComponent }
 ];
