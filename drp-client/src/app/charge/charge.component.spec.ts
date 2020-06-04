@@ -1,6 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ChargeComponent } from './charge.component';
+import { HttpClientModule, HttpClient  } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { ChargeFormComponent } from './charge-form/charge-form.component';
+import { ChargeListComponent } from './charge-list/charge-list.component';
+
 
 describe('ChargeComponent', () => {
   let component: ChargeComponent;
@@ -8,7 +13,17 @@ describe('ChargeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ChargeComponent ]
+      declarations: [ ChargeComponent, ChargeFormComponent, ChargeListComponent ],
+      imports: [ HttpClientModule ],
+      schemas: [ NO_ERRORS_SCHEMA ],
+       providers: [
+          HttpClient,
+          {
+              provide: Router,
+              useClass: class { navigate = jasmine.createSpy("navigate"); }
+          },
+      ]
+
     })
     .compileComponents();
   }));
