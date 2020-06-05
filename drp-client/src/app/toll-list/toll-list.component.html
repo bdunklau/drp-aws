@@ -14,8 +14,8 @@
   </thead>
   <tbody>
     <tr *ngFor="let toll of tolls; let i = index">
-      <td><a (click)="onSelect(toll)">edit</a></td>
-      <td><a (click)="delete(toll)">delete</a></td>
+      <td><a (click)="onSelect(toll)"><fa-icon [icon]="faEdit"></fa-icon></a></td>
+      <td><a (click)="delete(toll)"><fa-icon [icon]="faTrashAlt"></fa-icon></a></td>
       <th scope="row">{{i+1}}</th>
       <td>{{toll.city}}</td>
       <td>{{toll.location}}</td>
