@@ -4,6 +4,9 @@ import { Toll } from '../toll/toll.model';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+
 
 @Component({
   selector: 'app-toll-list',
@@ -14,6 +17,8 @@ export class TollListComponent implements OnInit {
 
   city: string;
   public tolls = [];
+  faEdit = faEdit;
+  faTrashAlt = faTrashAlt;
 
   constructor(private tollService:TollService,
 	     private router: Router,

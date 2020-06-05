@@ -11,6 +11,7 @@ import { TollListComponent } from './toll-list/toll-list.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ChargeFormComponent } from './charge-form/charge-form.component';
 import { ChargeListComponent } from './charge-list/charge-list.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,7 @@ import { ChargeListComponent } from './charge-list/charge-list.component';
     AppRoutingModule,
     HttpClientModule,
     FormsModule
-    , ReactiveFormsModule
+    , ReactiveFormsModule, FontAwesomeModule
   ],
   providers: [],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
