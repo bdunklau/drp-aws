@@ -23,14 +23,6 @@ export class ChargeFormComponent implements OnInit {
 
   time:number;
   zone:string;
-   /*******
-  yearValue:number;
-  monthValue:number;
-  dayValue:number;
-  hourValue:number;
-  minuteValue:number;
-  secondValue:number;
-   ****/
 
   constructor(private router: Router) { }
 
