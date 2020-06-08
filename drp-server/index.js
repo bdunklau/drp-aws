@@ -136,10 +136,10 @@ app.post('/drpapi/delete-vehicle-charges', function (req, res) {
   chargeVehicleServiceObj.deleteVehicleCharges();
 })
 
-app.get('/drpapi/get-account-summary/:plate', function (req, res) {
+app.get('/drpapi/get-vehicle-balance/:plate', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   let chargeVehicleServiceObj = new chargeVehicleService(req, res, tollServiceObj);
-  chargeVehicleServiceObj.getAccountSummary();
+  chargeVehicleServiceObj.getVehicleBalance();
 })
 
 app.get('/drpapi/temp-acc/:plate', function (req, res) {

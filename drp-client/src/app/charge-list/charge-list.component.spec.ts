@@ -3,7 +3,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientModule, HttpClient  } from '@angular/common/http';
 import { ChargeListComponent } from './charge-list.component';
 import { ChargeService } from '../charge.service';
-
+import { ActivatedRoute, ParamMap } from '@angular/router';
 
 
 describe('ChargeListComponent', () => {
@@ -16,6 +16,20 @@ describe('ChargeListComponent', () => {
       imports: [ HttpClientModule ],
       schemas: [ NO_ERRORS_SCHEMA ],
       providers: [ChargeService, HttpClient,
+
+            {
+              provide: ActivatedRoute,
+              useValue: {
+                snapshot: {
+                  paramMap:{get: function(str) {return '123'} }
+                },
+                paramMap: {
+                  subscribe: function(params:ParamMap) {
+                  }
+                }
+              }
+             }
+
       ]
 
 
