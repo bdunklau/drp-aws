@@ -4,11 +4,20 @@ const initService  = require('./services/initService');
 const tollService  = require('./services/tollService');
 const chargeVehicleService  = require('./services/chargeVehicleService');
 //const accountSummaryService = require('./services/accountSummaryService');
+// CSRF protection
+//const cookieParser = require('cookie-parser');
+//const csrf = require('csurf');
 const app = express();
 const port = 3000;
 const bodyParser = require('body-parser');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended : false}));
+
+
+// CSRF protection
+//app.use(cookieParser());
+//app.use(csrf({cookie: true}));
 
 
 // @see  https://github.com/bdunklau/drp-aws/wiki/API-drpapi-set-toll
@@ -44,6 +53,12 @@ app.get('/drpapi/get-tolls', function (req, res) {
   tollServiceObj.getTolls();
 })
 ************/
+
+
+app.get('/drpapi/get-tolls', function (req, res) {
+  let tollServiceObj = new tollService(req, res);
+  tollServiceObj.getTollsByQueryParms();
+})
 
 
 // @see  https://github.com/bdunklau/drp-aws/wiki/API--drpapi-get-tolls#drpapiget-tollscity

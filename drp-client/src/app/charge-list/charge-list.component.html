@@ -1,1 +1,20 @@
-Vehicle charges listed here
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">plate</th>
+            <th scope="col">city</th>
+            <th scope="col">location</th>
+            <th scope="col">time</th>
+            <th scope="col">price</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let charge of charges; let i = index">
+            <td>{{charge.plate}}</td>
+            <td>{{charge.city}}</td>
+            <td>{{charge.location}}</td>
+            <td>{{charge.time}}</td>
+            <td>{{charge.price}}</td>
+        </tr>
+    </tbody>
+</table>

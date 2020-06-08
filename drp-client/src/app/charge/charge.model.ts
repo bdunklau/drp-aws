@@ -8,7 +8,8 @@ export class Charge {
     constructor(public plate: string,
 	       public city: string,
 	       public location: string,
-	       public time:number) {
+	       public time:number,
+               public zone:number) {
     }
 
     setTime(year:number, month:number, day:number, hour:number, minute:number, second:number) {

@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { TollService } from '../toll.service';
+import { ChargeService } from '../charge.service';
 import { Toll } from '../toll/toll.model';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faDollarSign } from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
@@ -16,21 +18,36 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 export class TollListComponent implements OnInit {
 
   city: string;
+  time: number;
+  zone: number;
   public tolls = [];
   faEdit = faEdit;
   faTrashAlt = faTrashAlt;
+  faDollarSign = faDollarSign;
 
   constructor(private tollService:TollService,
+             private chargeService: ChargeService,
 	     private router: Router,
 	     private route: ActivatedRoute) { }
 
   ngOnInit() {
     let self = this;
     this.route.paramMap.subscribe((params: ParamMap) => {
-	if(!params.get('city'))
-            return;
-        self.city = params.get('city');
-	self.query(self.city);
+        let criteria:any = {}
+	if(params.get('city')) {
+            criteria['city'] = params.get('city');
+            self.city = params.get['city'];
+        }
+	if(params.get('time')) {
+            criteria['time'] = parseInt(params.get('time'));
+            self.time = criteria['time'];
+        }
+        if(params.get('zone')) {
+            criteria['zone'] = parseInt(params.get('zone'));
+            self.zone = criteria['zone'];
+        }
+        if(Object.keys(criteria).length == 0) return;
+	self.query(criteria);
     }) 
 
     this.listenForTollsToBeAdded();
@@ -57,6 +74,20 @@ export class TollListComponent implements OnInit {
   }
 
 
+  charge(toll) {
+    /************
+    A toll has been selected from the list.  Now we need to send the city, location and price somewhere
+    so the charge component can send it to the database
+    *************/
+
+    // modeled after TollComponent.onSubmit()
+    this.chargeService.chargeThis(toll).subscribe(data => {
+        if(!data || !data['args']) return;
+        this.chargeService.vehicleCharged(data['args'])
+    });
+  }
+
+
   listenForTollsToBeAdded() {
     let self = this;
     var observer = {
@@ -79,7 +110,7 @@ export class TollListComponent implements OnInit {
       let self = this;
       this.tollService.listenForCity().subscribe({
           next: function(value) {
-	      self.query(value);
+	      self.query({city:value});
 	  },
           error: function(value) {
           },
@@ -88,8 +119,8 @@ export class TollListComponent implements OnInit {
   }
 
 
-  query(city: string) {
-      this.tollService.getTolls(city)
+  query(criteria) {
+      this.tollService.getTolls(criteria)
     	  .subscribe(data => this.tolls = data);
   }
 
