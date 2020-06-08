@@ -43,12 +43,25 @@ export class TollService {
     }
 
 
-    getTolls(city: string): Observable<Toll[]> {
+    getTolls(criteria): Observable<Toll[]> {
+
+        let url:string = '/drpapi/get-tolls?';
+        let keys = Object.keys(criteria);
+        if(keys.length == 0)
+            return Observable.of([]);
+
+        let pairs = _.map(keys, key => {
+            return key+'='+criteria[key];
+        })
+        let queryString = _.join(pairs, '&');
+        url += queryString;
+        console.log(`url = ${url}`);
 
 	// ANGULAR HTTP
         //     https://angular.io/guide/http	
         var tolls = [];
-        return this.http.get(`/drpapi/get-tolls/${city}`).pipe(
+        //return this.http.get('/drpapi/get-tolls?city=NYC').pipe(
+        return this.http.get(url).pipe(
 	    map(res => {
                 _.each(res['result'], toll => {
 		    tolls.push(new Toll(toll.city, toll.location, toll.price, toll.timea, toll.timeb))

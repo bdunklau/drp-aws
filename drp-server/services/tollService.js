@@ -149,25 +149,26 @@ class TollService{
      */
     getToll_(parms) { //city, location, time /*(number)*/, onSuccess, onError) {
 	//var city; var location; var time /*number*/; var onSuccess; var onError;
-        
-        //var args = {};
+       
+        console.log('getToll_():  called');
+ 
 	var query = {};
 
 	if(parms.city) {
-         //   args['city'] = parms.city;
             query['city'] = parms.city;
         }
 
 	if(parms.location) {
-            //args['location'] = parms.location;
             query['location'] = parms.location;
         }
 
+        let zone = 0;
+        if(parms.zone) zone = parms.zone;
+
 	if(parms.time) {
-           // args['time'] = parms.time;
             let millis = parms.time;
 	    let xxxxx = moment(millis).format('Hmm');
-	    let time_hmm = parseInt(xxxxx);
+	    let time_hmm = parseInt(xxxxx) + zone
             query['timea'] = {$lt: time_hmm};
             query['timeb'] = {$gt: time_hmm};
 	}
@@ -188,6 +189,9 @@ class TollService{
 
 
     getToll_xxxx(parms, query) {
+        //console.log('getToll_xxxx(): parms = ', parms);
+        //console.log('getToll_xxxx(): query = ', query);
+
         try{
             MongoClient.connect(url, function(err, client) {
                 if(err) throw err;
@@ -252,7 +256,28 @@ class TollService{
         this.getToll();	
     }
 
+    getTollsByQueryParms() {
+        console.log('getTollsByQueryParms(): called');
+        let self = this;
+	let onSuccess = function(args) {
+            return self.res.status(200).json(args);
+	}
+	let onError = function(args) {
+	    return self.res.status(500).json(args);
+	}
 
+	var parms = {};
+	parms['onSuccess'] = onSuccess;
+	parms['onError'] = onError;
+	if(this.req.query.city) parms['city'] = this.req.query.city;
+	if(this.req.query.time) parms['time'] = parseInt(this.req.query.time);
+	if(this.req.query.zone) parms['zone'] = parseInt(this.req.query.zone);
+        if(!parms['city'] && !parms['time']) {
+            parms['error'] = 'no search parameters supplied';
+            return onError(parms);    
+        }
+        this.getToll_(parms);
+    }
 
 }
 module.exports = TollService

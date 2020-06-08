@@ -3,7 +3,7 @@ import * as moment from 'moment-timezone';
 import * as _ from 'lodash';
 import { Charge } from '../charge/charge.model';
 import { Router } from '@angular/router';
-
+import { ChargeService } from '../charge.service';
 
 @Component({
   selector: 'app-charge-form',
@@ -12,27 +12,19 @@ import { Router } from '@angular/router';
 })
 export class ChargeFormComponent implements OnInit {
 
-  charge = new Charge('^^plate9^^', 'NYC', '100 5th Ave', 0);
+  charge = new Charge('^^plate9^^', 'NYC', '100 5th Ave', 0, -400);
   city:string;
+  zone:number; //timezone offset, i.e. -400 or 100
   plate:string;
   londonTime:string;
   eastern:string;
   gmt:string;
   currTime:number;
   format:string = 'MMM D YYYY, h:mm:ss a';
-
   time:number;
-  zone:string;
-   /*******
-  yearValue:number;
-  monthValue:number;
-  dayValue:number;
-  hourValue:number;
-  minuteValue:number;
-  secondValue:number;
-   ****/
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+              private chargeService: ChargeService) { }
 
   ngOnInit() {
     this.setNow();
@@ -46,6 +38,7 @@ export class ChargeFormComponent implements OnInit {
   }
 
   private updateTimes() {
+    this.chargeService.time = this.currTime;
     this.gmt = moment(this.currTime).utc().format(this.format);
     this.londonTime = moment(this.currTime).tz('Europe/London').format(this.format);
     this.eastern = moment(this.currTime).tz('America/New_York').format(this.format);
@@ -57,18 +50,24 @@ export class ChargeFormComponent implements OnInit {
     this.addTimeToRoute(this.currTime);
   }
 
-  setCity(city:string) {
+  setCity(city:string, zone:number) {
     this.city = city;
-    this.router.navigate(['/charge', {city:city}]);
+    this.zone = zone;
+    this.chargeService.city = city;
+    this.chargeService.zone = zone;
+    this.router.navigate(['/charge', {city:city, zone:zone}]);
   }
 
   setPlate(plate:string) {
+    this.chargeService.plate = plate;
     this.plate = plate;
   }
 
   private addTimeToRoute(time:number) {
     let args:any = {time:time};
     if(this.city) args['city'] = this.city;
+    if(this.plate) args['plate'] = this.plate;
+    if(this.zone) args['zone'] = this.zone;
     this.router.navigate(['/charge', args]);
   }
 
