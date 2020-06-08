@@ -81,9 +81,10 @@ export class TollListComponent implements OnInit {
     *************/
 
     // modeled after TollComponent.onSubmit()
-    this.chargeService.chargeThis(toll).subscribe(data => {
+    console.log('this.zone = ', this.zone);
+    this.chargeService.chargeThis(toll, this.zone).subscribe(data => {
         if(!data || !data['args']) return;
-        this.chargeService.vehicleCharged(data['args'])
+        this.chargeService.vehicleCharged(data)
     });
   }
 

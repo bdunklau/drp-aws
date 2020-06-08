@@ -1,3 +1,9 @@
+<div *ngIf="charges.length > 0">
+<h3>{{charges[0].plate}} - Balance: {{balance}}</h3>
+</div>
+
+<h3>Charges</h3>
+
 <table class="table">
     <thead>
         <tr>
@@ -13,8 +19,13 @@
             <td>{{charge.plate}}</td>
             <td>{{charge.city}}</td>
             <td>{{charge.location}}</td>
-            <td>{{charge.time}}</td>
+            <td>{{charge.time | date:'full':'-0400'}} ({{charge.time}})</td>
             <td>{{charge.price}}</td>
         </tr>
     </tbody>
 </table>
+
+<div *ngIf="charges.length > 0">
+<button (click)="deleteCharges(charges[0].plate)" class="btn btn-danger">Delete Charges</button>
+</div>
+

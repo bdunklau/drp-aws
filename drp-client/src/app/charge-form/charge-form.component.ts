@@ -61,6 +61,12 @@ export class ChargeFormComponent implements OnInit {
   setPlate(plate:string) {
     this.chargeService.plate = plate;
     this.plate = plate;
+    let args:any = {};
+    if(this.city) args['city'] = this.city;
+    if(this.plate) args['plate'] = this.plate;
+    if(this.zone) args['zone'] = this.zone;
+    if(this.currTime) args['time'] = this.currTime;
+    this.router.navigate(['/charge', args]);
   }
 
   private addTimeToRoute(time:number) {

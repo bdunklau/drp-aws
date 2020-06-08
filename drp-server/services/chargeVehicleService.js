@@ -188,7 +188,7 @@ class ChargeVehicleService{
     
 
     // get the balance for one vehicle
-    getAccountSummary() {
+    getVehicleBalance() {
         let self = this;
 	let plate = this.req.params.plate;
        
@@ -232,14 +232,10 @@ class ChargeVehicleService{
         let self = this;
 	let plate = this.req.body.plate;
 	let location = this.req.body.location;
+        let zone = parseInt(this.req.body.zone);
 	let city = this.req.body.city;
 	let millis = parseInt(this.req.body.time);
 	let date = moment(millis).format('ddd, MMM Do YYYY, h:mm:ss a');
-	//let time_hmm = parseInt(moment(millis).format('Hmm'));
-
-        //console.log('chargeVehicle(): millis = ', millis);
-        //console.log('chargeVehicle(): date = ',date );
-        //console.log('chargeVehicle(): time_hmm = ', time_hmm);
 
 	let onSuccess = function(args) {
             // status, args, result, price <- these are the keys of args
@@ -252,33 +248,12 @@ class ChargeVehicleService{
 	            //let balance = {balance: -1};
                     self.insert(vehicleCharge, db, async function(){
 
-			    /*********************
-                        db.collection('accountSummaries').updateOne({"plate": plate}, { $inc: {"balance": args['price']}}, function(err, res2) {
-			    let xxx = db.collection('accountSummaries').findOne({"plate": plate});
-                             
-			    client.close();
-                        
-                            return self.res.status(200).json({
-                                status: 'charge vehicle',
-	                        args: vehicleCharge,
-		                //balance: res2.result 
-			        balance: 'check browser' 
-                            })
-			} );
-                             ***************/
-
-
 
                         /*let results =*/ db.collection('accountSummaries')
 		        .updateOne({plate: plate}, 
 				{$inc: {balance: args['price']}, $set: {plate: plate}}, 
 				{upsert: true} )
 		        .then(doc => {
-				/********
-                            console.log('chargeVehicle(): updateOne -> doc.matchedCount = ', doc.matchedCount);
-                            console.log('chargeVehicle(): updateOne -> doc.modifiedCount = ', doc.modifiedCount);
-                            console.log('chargeVehicle(): updateOne -> doc.upsertedId = ', doc.upsertedId);
-                                  *********/
 		            let results = [];
                             let cursor = db.collection('accountSummaries').find({plate: plate})
 		            //.project({_id:0, balance: 1}); // <-- means just return the 'balance' field
@@ -318,7 +293,7 @@ class ChargeVehicleService{
             })
 	}
 
-	this.tollService.getToll_({city: city, location: location, time: millis, onSuccess: onSuccess, onError: onError});
+	this.tollService.getToll_({city: city, location: location, time: millis, zone: zone, onSuccess: onSuccess, onError: onError});
     }
 
 

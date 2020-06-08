@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ChargeComponent } from './charge.component';
 import { HttpClientModule, HttpClient  } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { ChargeFormComponent } from '../charge-form/charge-form.component';
 import { ChargeListComponent } from '../charge-list/charge-list.component';
 
@@ -22,6 +22,19 @@ describe('ChargeComponent', () => {
               provide: Router,
               useClass: class { navigate = jasmine.createSpy("navigate"); }
           },
+          {
+            provide: ActivatedRoute,
+              useValue: {
+                snapshot: {
+                  paramMap:{get: function(str) {return '123'} }
+                },
+                paramMap: {
+                  subscribe: function(params:ParamMap) {
+                  }
+                }
+              }
+          }
+
       ]
 
     })
