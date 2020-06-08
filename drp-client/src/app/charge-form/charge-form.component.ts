@@ -21,9 +21,7 @@ export class ChargeFormComponent implements OnInit {
   gmt:string;
   currTime:number;
   format:string = 'MMM D YYYY, h:mm:ss a';
-
   time:number;
-  zone:string;
 
   constructor(private router: Router,
               private chargeService: ChargeService) { }

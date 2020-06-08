@@ -12,10 +12,10 @@ import "rxjs/add/observable/of";
 export class ChargeService {
 
   city:string;  // set by ChargeFormComponent.setCity()
-  zone:string;  // set by ChargeFormComponent.setCity()
+  zone:number;  // set by ChargeFormComponent.setCity()
   plate:string; // set by ChargeFormComponent.setPlate()
   time:number;  // set by ChargeFormComponent.updateTimes() 
-  private vehicle_charged = new Subject<{plate:string, city:string, location:string, time:number, price:number}>();
+  private vehicle_charged = new Subject<{plate:string, city:string, location:string, time:number, zone:number, price:number}>();
 
   constructor(public http: HttpClient) { }
 
