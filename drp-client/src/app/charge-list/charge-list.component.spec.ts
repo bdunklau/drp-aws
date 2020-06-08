@@ -12,7 +12,7 @@ describe('ChargeListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ChargeListComponent ],,
+      declarations: [ ChargeListComponent ],
       imports: [ HttpClientModule ],
       schemas: [ NO_ERRORS_SCHEMA ],
       providers: [ChargeService, HttpClient,
