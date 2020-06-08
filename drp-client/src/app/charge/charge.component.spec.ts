@@ -22,8 +22,8 @@ describe('ChargeComponent', () => {
               provide: Router,
               useClass: class { navigate = jasmine.createSpy("navigate"); }
           },
-
-          provide: ActivatedRoute,
+          {
+            provide: ActivatedRoute,
               useValue: {
                 snapshot: {
                   paramMap:{get: function(str) {return '123'} }
