@@ -12,6 +12,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ChargeFormComponent } from './charge-form/charge-form.component';
 import { ChargeListComponent } from './charge-list/charge-list.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { MenuComponent } from './menu/menu.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     TollListComponent,
     PageNotFoundComponent,
     ChargeFormComponent,
-    ChargeListComponent
+    ChargeListComponent,
+    MenuComponent
   ],
   imports: [
     BrowserModule,
