@@ -1,6 +1,6 @@
 <div class="container-fluid">
 
-<h4>Select City</h4>
+<h4>Select City <span *ngIf="city != null">: {{city}}</span></h4>
 <div class="row" style="margin-bottom:60px;">
     <div class="col">
       <button (click)="setCity('NYC', '-0400')" class="btn btn-primary" type="button">NYC</button>
@@ -9,7 +9,7 @@
     </div>
 </div>
 <hr/>
-<h4>Select Plate</h4>
+<h4>Select Plate <span *ngIf="plate != null">: {{plate}}</span></h4>
 <div class="row" style="margin-bottom:60px;">
     <div class="col">
       <button (click)="setPlate('LIC PLT 1')" class="btn btn-primary" type="button">LIC PLT 1</button>
