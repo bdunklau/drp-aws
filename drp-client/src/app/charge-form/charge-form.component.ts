@@ -14,7 +14,7 @@ export class ChargeFormComponent implements OnInit {
 
   charge = new Charge('^^plate9^^', 'NYC', '100 5th Ave', 0, -400);
   city:string;
-  zone:number; //timezone offset, i.e. -400 or 100
+  zone:string; //timezone offset, i.e. -0400 or 0100
   plate:string;
   londonTime:string;
   eastern:string;
@@ -50,11 +50,11 @@ export class ChargeFormComponent implements OnInit {
     this.addTimeToRoute(this.currTime);
   }
 
-  setCity(city:string, zone:number) {
+  setCity(city:string, zone:string) {
     this.city = city;
     this.zone = zone;
     this.chargeService.city = city;
-    this.chargeService.zone = zone;
+    this.chargeService.zone = parseInt(zone);
     this.router.navigate(['/charge', {city:city, zone:zone}]);
   }
 

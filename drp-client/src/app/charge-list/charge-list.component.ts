@@ -11,6 +11,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 export class ChargeListComponent implements OnInit {
 
   plate: string;
+  zone: string;
   balance: number;
   charges:{plate:string, city:string, price:number, location:string, time:number}[] = [];
 
@@ -25,6 +26,9 @@ export class ChargeListComponent implements OnInit {
           if(params.get('plate')) {
               criteria['plate'] = params.get('plate');
               self.plate = params.get('plate');
+          }
+          if(params.get('zone')) {
+              self.zone = params.get('zone');
           }
           if(Object.keys(criteria).length == 0) return;
           self.queryForCharges(criteria);

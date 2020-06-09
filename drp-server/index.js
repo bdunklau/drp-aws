@@ -3,6 +3,7 @@ const express = require('express');
 const initService  = require('./services/initService');
 const tollService  = require('./services/tollService');
 const chargeVehicleService  = require('./services/chargeVehicleService');
+const loadService  = require('./services/loadService');
 //const accountSummaryService = require('./services/accountSummaryService');
 // CSRF protection
 //const cookieParser = require('cookie-parser');
@@ -140,6 +141,16 @@ app.get('/drpapi/get-vehicle-balance/:plate', function (req, res) {
   let tollServiceObj = new tollService(req, res);
   let chargeVehicleServiceObj = new chargeVehicleService(req, res, tollServiceObj);
   chargeVehicleServiceObj.getVehicleBalance();
+})
+
+
+
+
+
+
+app.post('/drpapi/temp-load-tolls', function (req, res) {
+  let loadServiceObj = new loadService(req, res);
+  loadServiceObj.loadTolls();
 })
 
 app.get('/drpapi/temp-acc/:plate', function (req, res) {

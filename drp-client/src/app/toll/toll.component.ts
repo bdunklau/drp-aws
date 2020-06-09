@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { TollService } from '../toll.service';
+import { LoadService } from '../load.service';
 import { Toll } from './toll.model';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-toll',
@@ -15,6 +17,7 @@ export class TollComponent implements OnInit {
     updating:boolean = false;
 
     constructor(private tollService: TollService,
+              private loadService: LoadService,
 	      private route: ActivatedRoute) {
     }
 
@@ -55,6 +58,26 @@ export class TollComponent implements OnInit {
 
     searchTolls(form) {
         this.tollService.citySelected(this.toll.city);
+    }
+
+    loadTolls(file:string) {
+        let self = this;
+        this.loadService.getTolls(file).subscribe(data => {
+            self.loadService.loadTolls(data).subscribe(result => {
+                //console.log('Is this a Toll[] :  ', result);
+
+                // result is the json returned by drp-server/services/loadService.js:loadTolls()
+                // Notable:  keys are status and result (so, yes result['result']
+                // result['result'] contains: insertedIds (an array of _id values),
+                // nInserted: int
+                // nMatched: int
+                // nModified: int
+                // nRemoved: int
+                // nUpserted: int
+                // ok: int   and a few others
+                self.tollService.tollsAdded(data);
+            })
+        });
     }
 
 }
