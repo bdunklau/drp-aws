@@ -19,7 +19,7 @@
             <td>{{charge.plate}}</td>
             <td>{{charge.city}}</td>
             <td>{{charge.location}}</td>
-            <td>{{charge.time | date:'full':'-0400'}} ({{charge.time}})</td>
+            <td>{{charge.time | date:'full':zone}} <!-- correct: millis time:  ({{charge.time}})  --></td>
             <td>{{charge.price}}</td>
         </tr>
     </tbody>

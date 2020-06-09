@@ -15,6 +15,7 @@ import * as _ from 'lodash';
 export class TollService {
 
     private toll_add_subject = new Subject<Toll>();
+    private tolls_added = new Subject<Toll[]>();
     private city_selected = new Subject<string>();
 
     constructor(public http: HttpClient) { 
@@ -38,8 +39,20 @@ export class TollService {
         this.toll_add_subject.next(toll);
     }
 
+    tollsAdded(tolls: Toll[]) {
+        this.tolls_added.next(tolls);
+    }
+
+
+    // called by TollListComponent
     tollAddEvents() {
         return this.toll_add_subject; 
+    }
+
+
+    // called by TollListComponent
+    listenForTollsAdded() {
+        return this.tolls_added;
     }
 
 

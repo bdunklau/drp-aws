@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient  } from '@angular/common/http';
 import { TollComponent } from './toll.component';
 import { TollService } from '../toll.service';
+import { LoadService } from '../load.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable,of, from } from 'rxjs';
 
@@ -16,7 +17,7 @@ describe('TollComponent', () => {
       declarations: [ TollComponent ],
       imports: [ FormsModule, HttpClientModule ],
       schemas: [ NO_ERRORS_SCHEMA ],
-      providers: [TollService, HttpClient, 
+      providers: [TollService, HttpClient, LoadService, 
 	     {
 	      provide: ActivatedRoute, 
 	      useValue: {
